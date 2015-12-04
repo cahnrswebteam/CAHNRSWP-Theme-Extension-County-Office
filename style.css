@@ -1,0 +1,99 @@
+/*
+Theme Name: Extension County Office
+Description: A WSU Spine child theme for WSU Extension County office sites.
+Version: 0.0.1
+Author: CAHNRS Communications, Phil Cable
+Author URI: http://cahnrs.wsu.edu/communications/
+Template: spine
+*/
+
+.extension-signature .cahnrs-header-group {
+	border-top-color: #981e32;
+}
+.home .main-header {
+	height: 142px;
+}
+.home .main-header:before,
+.home .main-header:after {
+	content: '';
+	display: block;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	width: 9999rem;
+}
+.home .main-header:before {
+	left: -9999rem;
+	margin-left: -198px;
+}
+.home .main-header:after {
+	right: -9999rem;
+}
+.home #extension-heading {
+	border-right: none;
+}
+.home .main-header,
+.home .main-header:before,
+.home .main-header:after,
+/* get rid of :not() */
+body:not(.home) .cahnrs-header-group,
+body:not(.home) .cahnrs-header-group:before,
+body:not(.home) .cahnrs-header-group:after,
+.quicklinks dl {
+	background: #532400;
+}
+.home .quicklinks {
+	padding-top: 0;
+}
+.main-header sub {
+	font-size: 50px;
+}
+.main-header sub span,
+.main-header sub span:after {
+	height: 50px;
+}
+
+/* Actions */
+.actions-footer {
+	box-sizing: border-box;
+	height: 137px;
+	position: fixed;
+	top: 5px;
+	right: 0;
+	z-index: 99164;
+}
+.logged-in .actions-footer {
+	top: 37px;
+}
+.actions-footer .action-item {
+	height: 33.33%;
+	position: relative;
+}
+.actions-footer .action-item a {
+	box-sizing: border-box;
+	background: #981e32;
+	color: #fff;
+	display: block;
+	padding: 0.5rem 1rem;
+	position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.actions-footer .action-item:first-of-type a {
+	transform: translateY(-46%);
+}
+.actions-footer .action-item:last-of-type a {
+	transform: translateY(-56%);
+}
+
+
+@media screen and (max-width:989px) {
+	.home .main-header:before {
+		margin-left: 0
+	}
+}
+@media only screen and (max-width:693px) {
+	.main-header sub {
+		font-size: 7.5vw
+	}
+}
