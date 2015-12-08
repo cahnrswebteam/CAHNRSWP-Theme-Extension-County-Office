@@ -12,11 +12,11 @@
 	float: left;
 }
 .landing-page-showcase .featured {
-	padding: 0 1rem 0 0;
+	padding: 0 1rem 0 0; padding: 0 0.5rem 0 0;
 	width: 67%;
 }
 .landing-page-showcase .syndicated {
-	padding: 0 0 0 1rem;
+	padding: 0 0 0 1rem; padding: 0 0 0 0.5rem;
 	width: 33%;
 }
 .landing-page-showcase .county-responsive-media {
@@ -24,8 +24,11 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+.landing-page-showcase .syndicated .county-responsive-media {
+	padding-bottom: 52%; padding-bottom: 54.75%;
+}
 .landing-page-showcase .syndicated .county-responsive-media:first-of-type {
-	margin-bottom: 1rem;
+	margin-bottom: 2rem; margin-bottom: 1rem;
 }
 .landing-page-showcase .county-responsive-media a {
 	height: 100%;
@@ -42,7 +45,8 @@
 }
 .landing-page-showcase .county-responsive-media a:hover .article-header,
 .landing-page-showcase .county-responsive-media a:hover .article-summary {
-	background-color: rgba(198,12,48,0.9);
+	/*background-color: rgba(198,12,48,0.9);*/
+	background-color: rgba(35,40,43,0.95);
 }
 .landing-page-showcase .article-title {
 	font-size: 1.1em;
@@ -76,5 +80,8 @@
 	}
 	.landing-page-showcase .article-summary {
 		display: none;
+	}
+	.landing-page-showcase .syndicated .county-responsive-media {
+		padding-bottom: 56.25%;
 	}
 }

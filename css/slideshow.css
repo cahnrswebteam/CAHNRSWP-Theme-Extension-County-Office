@@ -20,7 +20,8 @@
 	width: 100%;
 }
 .county-slideshow .county-responsive-media a:hover .article-header {
-	background-color: rgba(198,12,48,0.9);
+	/*background-color: rgba(198,12,48,0.9);*/
+	background-color: rgba(35,40,43,0.95);
 }
 .county-slideshow .article-title {
 	font-size: 1.1em;

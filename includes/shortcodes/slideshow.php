@@ -32,6 +32,7 @@ class County_Extension_Slideshow {
 			'post_type' => '',
 			'taxonomy'  => '',
 			'terms'     => '',
+			'items'     => '',
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
@@ -59,18 +60,30 @@ class County_Extension_Slideshow {
 					$slideshow_query = new WP_Query( $slideshow_query_args );
 					if ( $slideshow_query->have_posts() ) :
 						while ( $slideshow_query->have_posts() ) : $slideshow_query->the_post();
+							// Only show posts that have a featured image.
 							if ( has_post_thumbnail() ) {
-								set_query_var( 'image_src', wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) ) );
+								set_query_var( 'image', wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) ) );
+								set_query_var( 'permalink', get_the_permalink() );
+								set_query_var( 'title', get_the_title() );
+								//set_query_var( 'excerpt', '<p>' . get_the_excerpt() . '</p>' );
+								get_template_part( 'includes/shortcodes/slideshow-item' );
 							}
-							set_query_var( 'permalink', get_the_permalink() );
-							set_query_var( 'title', get_the_title() );
-							//set_query_var( 'excerpt', '<p>' . get_the_excerpt() . '</p>' );
-							get_template_part( 'includes/shortcodes/slideshow-item' );
 						endwhile;
 					endif;
 					wp_reset_postdata();
 				} elseif ( 'manual' === $atts['source'] ) {
-
+					$items = json_decode( $atts['items'], true );
+					if ( is_array( $items ) ) {
+						foreach ( $items as $item ) {
+							if ( $item['img'] ) {
+								set_query_var( 'image', $item['img'] );
+								set_query_var( 'permalink', $item['link'] );
+								set_query_var( 'title', $item['title'] );
+								//set_query_var( 'excerpt', '<p>' . $item['excerpt'] . '</p>' );
+								get_template_part( 'includes/shortcodes/slideshow-item' );
+							}
+						}
+					}
 				}
 			?>
 			<div class="cycle-pager"></div>

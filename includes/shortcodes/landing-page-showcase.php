@@ -62,18 +62,31 @@ class County_Extension_Landing_Page_Showcase {
 						$county_feature_query = new WP_Query( $county_feature_query_args );
 						if ( $county_feature_query->have_posts() ) :
 							while ( $county_feature_query->have_posts() ) : $county_feature_query->the_post();
+								// Only show posts that have a featured image.
 								if ( has_post_thumbnail() ) {
-									$feature_image_src = wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) );
+									set_query_var( 'image', wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) ) );
+									set_query_var( 'permalink', get_the_permalink() );
+									set_query_var( 'title', get_the_title() );
+									set_query_var( 'excerpt', '<p>' . get_the_excerpt() . '</p>' );
+									get_template_part( 'includes/shortcodes/slideshow-item' );
 								}
-								$feature_permalink = get_the_permalink();
-								$feature_title = get_the_title();
-								$feature_excerpt = '<p>' . get_the_excerpt() . '</p>';
 							endwhile;
 						endif;
 						wp_reset_postdata();
-					}/* elseif ( 'post' === $atts['feature_source'] ) {
-						or whatever
-					}*/
+					} elseif ( 'manual' === $atts['feature_source'] ) {
+						$items = json_decode( $atts['items'], true );
+						if ( is_array( $items ) ) {
+							foreach ( $items as $item ) {
+								if ( $item['img'] ) {
+									set_query_var( 'image', $item['img'] );
+									set_query_var( 'permalink', $item['link'] );
+									set_query_var( 'title', $item['title'] );
+									set_query_var( 'excerpt', '<p>' . $item['excerpt'] . '</p>' );
+									get_template_part( 'includes/shortcodes/slideshow-item' );
+								}
+							}
+						}
+					}
 
 					if ( isset( $feature_title ) ) :
 				?>
