@@ -121,6 +121,29 @@ body:not(.home) .cahnrs-header-group:after,
 		margin-left: 0
 	}
 }
+@media screen and (max-width:791px) {
+	.actions-footer {
+		bottom: 0;
+		height: auto;
+		right: auto;
+		top: auto;
+		width: 100%;
+	}
+	.actions-footer .action-item {
+		box-sizing: border-box;
+		float: left;
+		height: auto;
+		width: 33.33%;
+	}
+	.actions-footer .action-item:nth-of-type(2) {
+		padding: 0 1px;
+	}
+	.actions-footer .action-item a {
+		text-align: center;
+		top: auto;
+		transform: none;
+	}
+}
 @media only screen and (max-width:693px) {
 	.main-header sub {
 		font-size: 7.5vw

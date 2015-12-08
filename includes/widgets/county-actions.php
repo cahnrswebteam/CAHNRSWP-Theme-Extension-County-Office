@@ -14,6 +14,8 @@ class County_Actions_Widget extends WP_Widget {
 	 *
 	 * @param array $args
 	 * @param array $instance
+	 *
+	 * @todo All three actions in one widget, possibly provide a way to hide the object.
 	 */
 	public function widget( $args, $instance ) {
 		$default_instance = array(
@@ -30,6 +32,8 @@ class County_Actions_Widget extends WP_Widget {
 	 * @param array $instance The instance of the current widget form being displayed.
 	 *
 	 * @return void
+	 *
+	 * @todo All three actions in one widget.
 	 */
 	public function form( $instance ) {
 		$action_url = ! empty( $instance['action_url'] ) ? $instance['action_url'] : '';
