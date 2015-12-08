@@ -1,0 +1,23 @@
+#after_title-sortables {
+	min-height: 10px;
+}
+.cahnrswp-program-icon {
+	float: right;
+}
+.cahnrswp-program-contact-info {
+	display: table;
+	width: 50%;
+}
+.cahnrswp-program-contact-info p {
+	display: table-row;
+}
+.cahnrswp-program-contact-info label,
+.cahnrswp-program-contact-info input {
+	display: table-cell;
+}
+.cahnrswp-program-contact-info label {
+	padding-right: 12px;
+	text-align: right;
+	white-space: nowrap;
+	width: 68px;
+}

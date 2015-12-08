@@ -1,7 +1,11 @@
 <?php
 
 include_once( __DIR__ . '/includes/customizer.php' ); // Include CAHNRS customizer functionality.
-include_once( __DIR__ . '/includes/county-actions-widget.php' ); // Set up the widget used to display the footer area.
+include_once( __DIR__ . '/includes/widgets/county-actions.php' ); // Set up the widget used to display the actions footer area.
+include_once( __DIR__ . '/includes/shortcodes/landing-page-showcase.php' ); // Landing page showcase shortcode.
+include_once( __DIR__ . '/includes/shortcodes/slideshow.php' ); // Slideshow shortcode.
+include_once( __DIR__ . '/includes/shortcodes/search-form.php' ); // Search form shortcode.
+include_once( __DIR__ . '/includes/shortcodes/contact-info.php' ); // Contact shortcode.
 
 /**
  * Set up a theme hook for the site header.
@@ -17,7 +21,8 @@ class WSU_Extension_Property_Theme {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_scripts' ), 21 );
 		add_action( 'cahnrswp_site_header', array( $this, 'cahnrswp_default_header' ), 1 );
-		//add_action( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		add_action( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 1 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 		add_filter( 'mce_buttons_2', array( $this, 'mce_buttons_2' ) );
@@ -96,18 +101,23 @@ class WSU_Extension_Property_Theme {
 	}
 
 	/**
+	 * Enqueue scripts and styles for the admin interface.
+	 */
+	public function admin_enqueue_scripts( $hook ) {
+		$screen = get_current_screen();
+		if ( ( 'post-new.php' === $hook || 'post.php' === $hook ) && 'page' === $screen->post_type ) {
+			wp_enqueue_style( 'admin-page', get_stylesheet_directory_uri() . '/css/admin-page.css' );
+		}
+	}
+
+	/**
 	 * Add a metabox context after the title.
 	 *
 	 * @param WP_Post $post
-	 
+	 */
 	public function edit_form_after_title( $post ) {
-		if ( 'page' !== $post->post_type ) {
-			return;
-		}
-		wp_nonce_field( 'cahnrswp_hide_title', 'cahnrswp_hide_title_nonce' );
-		$value = get_post_meta( $post->ID, '_cahnrswp_hide_title', true );
-		?><label><input type="checkbox" name="_cahnrswp_hide_title" value="1" <?php checked( $value, '1' ); ?> /> Hide Title</label><?php
-	}*/
+		do_meta_boxes( get_current_screen(), 'after_title', $post );
+	}
 
 	/**
 	 * Add custom meta boxes. (Restrict to displaying only when PB is not active for posts?)
@@ -115,15 +125,20 @@ class WSU_Extension_Property_Theme {
 	 * @param string $post_type The slug of the current post type.
 	 */
 	public function add_meta_boxes( $post_type ) {
-		if ( 'post' !== $post_type ) {
-			return;
-		}
 		add_meta_box(
 			'cahnrswp_post_sidebar',
 			'Post Sidebar',
 			array( $this, 'cahnrswp_post_sidebar' ),
 			'post',
 			'side',
+			'default'
+		);
+		add_meta_box(
+			'cahnrswp_county_program_info',
+			'Program Information',
+			array ( $this, 'cahnrswp_county_program_info' ),
+			'page',
+			'after_title',
 			'default'
 		);
 	}
@@ -149,6 +164,45 @@ class WSU_Extension_Property_Theme {
 	}
 
 	/**
+	 * Program contact information and icon markup.
+	 *
+	 * @todo Investigate ways to limit to program pages...
+	 */
+	public function cahnrswp_county_program_info( $post ) {
+		wp_nonce_field( 'cahnrswp_program_info', 'cahnrswp_program_info_nonce' );
+		$program_icons = array(
+			'4-H' => get_stylesheet_directory_uri() . '/program-icons/4-h.png',
+		);
+		$program_contact_name = get_post_meta( $post->ID, '_cahnrswp_program_specialist', true );
+		$program_contact_phone = get_post_meta( $post->ID, '_cahnrswp_program_phone', true );
+		$program_contact_email = get_post_meta( $post->ID, '_cahnrswp_program_email', true );
+		$program_icon = get_post_meta( $post->ID, '_cahnrswp_program_icon', true );
+		?>
+    <select name="_cahnrswp_program_icon" class="cahnrswp-program-icon">
+			<option value="">(Icon)</option>
+			<?php foreach ( $program_icons as $name => $url ) : ?>
+			<option value="<?php echo $url; ?>" <?php selected( $program_icon, $url ); ?>><?php echo $name; ?></option>
+    	<?php endforeach; ?>
+		</select>
+		<p><strong>Specialist Contact Information</strong></p>
+		<div class="cahnrswp-program-contact-info">
+			<p>
+				<label for="cahnrswp-program-specialist">Name, Title</label>
+				<input type="text" name="_cahnrswp_program_specialist" id="cahnrswp-program-specialist" class="widefat" value="<?php echo $program_contact_name; ?>" />
+			</p>
+			<p>
+				<label for="cahnrswp-program-phone">Phone</label>
+				<input type="text" name="_cahnrswp_program_phone" id="cahnrswp-program-phone" class="widefat" value="<?php echo $program_contact_phone; ?>" />
+			</p>
+			<p>
+				<label for="cahnrswp-program-email">Email</label>
+				<input type="text" name="_cahnrswp_program_email" id="cahnrswp-program-email" class="widefat" value="<?php echo $program_contact_email; ?>" />
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Save custom data.
 	 *
 	 * @param int $post_id
@@ -164,22 +218,6 @@ class WSU_Extension_Property_Theme {
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return $post_id;
 		}
-		/*if ( 'page' == $post->post_type ) {
-			// Check nonce.
-			if ( ! isset( $_POST['cahnrswp_hide_title_nonce'] ) ) {
-				return $post_id;
-			}
-			$nonce = $_POST['cahnrswp_hide_title_nonce'];
-			if ( ! wp_verify_nonce( $nonce, 'cahnrswp_hide_title' ) ) {
-				return $post_id;
-			}
-			// Sanitize and save 'hide title' option.
-			if ( isset( $_POST['_cahnrswp_hide_title'] ) ) {
-				update_post_meta( $post_id, '_cahnrswp_hide_title', 1 );
-			} else {
-				delete_post_meta( $post_id, '_cahnrswp_hide_title' );
-			}
-		}*/
 		if ( 'post' == $post->post_type ) {
 			// Check nonce.
 			if ( ! isset( $_POST['cahnrswp_sidebar_nonce'] ) ) {
@@ -194,6 +232,37 @@ class WSU_Extension_Property_Theme {
 				update_post_meta( $post_id, '_cahnrswp_sidebar', sanitize_text_field( $_POST['_cahnrswp_sidebar'] ) );
 			} else {
 				delete_post_meta( $post_id, '_cahnrswp_sidebar' );
+			}
+		}
+		if ( 'page' == $post->post_type ) {
+			// Check nonce.
+			if ( ! isset( $_POST['cahnrswp_program_info_nonce'] ) ) {
+				return $post_id;
+			}
+			$nonce = $_POST['cahnrswp_program_info_nonce'];
+			if ( ! wp_verify_nonce( $nonce, 'cahnrswp_program_info' ) ) {
+				return $post_id;
+			}
+			// Sanitize and save program info.
+			if ( isset( $_POST['_cahnrswp_program_specialist'] ) ) {
+				update_post_meta( $post_id, '_cahnrswp_program_specialist', sanitize_text_field( $_POST['_cahnrswp_program_specialist'] ) );
+			} else {
+				delete_post_meta( $post_id, '_cahnrswp_program_specialist' );
+			}
+			if ( isset( $_POST['_cahnrswp_program_phone'] ) ) {
+				update_post_meta( $post_id, '_cahnrswp_program_phone', sanitize_text_field( $_POST['_cahnrswp_program_phone'] ) );
+			} else {
+				delete_post_meta( $post_id, '_cahnrswp_program_phone' );
+			}
+			if ( isset( $_POST['_cahnrswp_program_email'] ) ) {
+				update_post_meta( $post_id, '_cahnrswp_program_email', sanitize_text_field( $_POST['_cahnrswp_program_email'] ) );
+			} else {
+				delete_post_meta( $post_id, '_cahnrswp_program_email' );
+			}
+			if ( isset( $_POST['_cahnrswp_program_icon'] ) ) {
+				update_post_meta( $post_id, '_cahnrswp_program_icon', sanitize_text_field( $_POST['_cahnrswp_program_icon'] ) );
+			} else {
+				delete_post_meta( $post_id, '_cahnrswp_program_icon' );
 			}
 		}
 	}
@@ -218,7 +287,7 @@ class WSU_Extension_Property_Theme {
 	 * Remove most of the Spine page templates.
 	 */
 	public function theme_page_templates( $templates ) {
-		unset( $templates['templates/blank.php'] );
+		//unset( $templates['templates/blank.php'] );
 		unset( $templates['templates/halves.php'] );
 		unset( $templates['templates/margin-left.php'] );
 		unset( $templates['templates/margin-right.php'] );
