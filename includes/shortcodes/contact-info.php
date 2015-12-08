@@ -25,7 +25,7 @@ class County_Extension_Contact {
 		if ( empty( $atts[''] ) ) {
 			return '';
 		}*/
-		
+
 		ob_start();
 		?>
 		<div class="county-contact">
@@ -37,9 +37,9 @@ class County_Extension_Contact {
 			<p class="unit-email"><a href="mailto:<?php echo esc_attr( spine_get_option( 'contact_email' ) ); ?>"><?php echo esc_html( spine_get_option( 'contact_email' ) ); ?></a></p>
 			<?php $contact_point = spine_get_option( 'contact_ContactPoint' ); ?>
 			<?php if ( ! empty( $contact_point ) ) : ?>
-      <p class="unit-contact"><a href="<?php echo esc_url( $contact_point ); ?>"><?php echo esc_html( spine_get_option( 'contact_ContactPointTitle' ) ); ?></a></p>
+			<p class="unit-contact"><a href="<?php echo esc_url( $contact_point ); ?>"><?php echo esc_html( spine_get_option( 'contact_ContactPointTitle' ) ); ?></a></p>
 			<?php endif; ?>
-      <p class="unit-hours"><?php echo wp_kses_post( $content ); ?></p>
+			<p class="unit-hours"><?php echo wp_kses_post( $content ); ?></p>
 		</div>
 		<?php
 		$content = ob_get_contents();

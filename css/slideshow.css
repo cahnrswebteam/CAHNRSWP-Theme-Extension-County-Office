@@ -1,0 +1,50 @@
+.county-slideshow .county-responsive-media {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 100%;
+}
+.county-slideshow .county-responsive-media a {
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+.county-slideshow .article-header {
+	background-color: rgba(35,40,43,0.6);
+	bottom: 0;
+	box-sizing: border-box;
+	color: #fff;
+	padding: 0.5rem 0.5rem 3.5rem 0.5rem;
+	position: absolute;
+	transition: background-color .2s ease-in-out;
+	width: 100%;
+}
+.county-slideshow .county-responsive-media a:hover .article-header {
+	background-color: rgba(198,12,48,0.9);
+}
+.county-slideshow .article-title {
+	font-size: 1.1em;
+	line-height: normal;
+	padding: 0;
+}
+.cycle-pager {
+	bottom: 0;
+	height: 1rem;
+	padding: 1rem 0;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	z-index: 101;
+}
+.cycle-pager span {
+	cursor: pointer;
+	display: inline-block;
+	font-size: 3rem;
+	line-height: 0;
+	height: 1rem;
+	vertical-align: middle;
+}
+.cycle-pager span:hover,
+.cycle-pager-active {
+	color: #fff;
+}

@@ -14,16 +14,12 @@ class County_Extension_Site_Search {
 	 */
 	public function display_county_site_search( $atts ) {
 
-		$defaults = array(
+		/*$defaults = array(
 			'' => '',
 		);
 
-		$atts = shortcode_atts( $defaults, $atts );
+		$atts = shortcode_atts( $defaults, $atts );*/
 
-		/*if ( empty( $atts[''] ) ) {
-			return '';
-		}*/
-		
 		ob_start();
 		?>
 		<form role="search" method="get" class="cahnrs-search" action="<?php echo home_url( '/' ); ?>">

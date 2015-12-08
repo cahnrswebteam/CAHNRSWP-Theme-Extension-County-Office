@@ -39,10 +39,10 @@ class County_Extension_Landing_Page_Showcase {
 		if ( ! is_front_page() ) {
 			return '';
 		}
-		
+
 		ob_start();
 		?>
-    <section class="landing-page-showcase">
+		<section class="landing-page-showcase">
 
 			<?php if ( $atts['feature_source'] ) : ?>
 			<div class="featured">
@@ -74,7 +74,7 @@ class County_Extension_Landing_Page_Showcase {
 					}/* elseif ( 'post' === $atts['feature_source'] ) {
 						or whatever
 					}*/
-					
+
 					if ( isset( $feature_title ) ) :
 				?>
 				<article class="county-responsive-media"<?php echo ' style="background-image:url(' . $feature_image_src . ');"'; ?>>
@@ -98,7 +98,7 @@ class County_Extension_Landing_Page_Showcase {
 					$syndicated_image_src = 'http://m1.wpdev.cahnrs.wsu.edu/extension-property/wp-content/uploads/sites/18/2015/05/palouse-night-1188x891.jpg';
 					$syndicated_permalink = '#';
 					$syndicated_title = 'Syndicated Content';
-					
+
 					if ( isset( $syndicated_title ) ) :
 				?>
 				<article class="county-responsive-media" style="background-image:url(<?php echo $syndicated_image_src; ?>);">
@@ -114,11 +114,11 @@ class County_Extension_Landing_Page_Showcase {
 					$additional_syndicated_image_src = 'http://m1.wpdev.cahnrs.wsu.edu/cahnrs-property/wp-content/uploads/sites/19/2015/06/palouse-1188x891.jpg';
 					$additional_syndicated_permalink = '#';
 					$additional_syndicated_title = 'Syndicated Content';
-					
+
 					if ( isset( $additional_syndicated_title ) ) :
 				?>
 				<article class="county-responsive-media" style="background-image:url(<?php echo $additional_syndicated_image_src; ?>);">
-        	<a href="<?php echo $additional_syndicated_permalink; ?>">
+					<a href="<?php echo $additional_syndicated_permalink; ?>">
 						<header class="article-header">
 							<h2 class="article-title"><?php echo $additional_syndicated_title; ?></h2>
 						</header>

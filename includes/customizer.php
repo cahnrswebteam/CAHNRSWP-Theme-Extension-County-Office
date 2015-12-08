@@ -58,24 +58,6 @@ function extension_property_customize_register( $wp_customize ) {
 		),
 	));
 
-	$wp_customize->add_setting('spine_options[cahnrs_header_bg_vellum]', array(
-		'default'    => '',
-		'capability' => 'edit_theme_options',
-		'type'       => 'option'
-	));
-
-	$wp_customize->add_control('cahnrs_header_bg_vellum', array(
-		'settings'   => 'spine_options[cahnrs_header_bg_vellum]',
-		'label'      => __('Background Transparency', 'spine'),
-		'section'    => 'cahnrs_header',
-		'type'       => 'select',
-		'choices'    => array(
-			'default'    => '0%',
-			'vellum-50'  => '50%',
-			'vellum-100' => '100%',
-		),
-	));
-
 	$wp_customize->add_setting('spine_options[cahnrs_header_fixed]', array(
 		'default'    => '',
 		'capability' => 'edit_theme_options',
@@ -87,37 +69,6 @@ function extension_property_customize_register( $wp_customize ) {
 		'section'  => 'cahnrs_header',
 		'settings' => 'spine_options[cahnrs_header_fixed]',
 		'type'     => 'checkbox',
-	));
-
-	$wp_customize->add_setting('spine_options[cahnrs_tooling]', array(
-		'default'    => '0',
-		'capability' => 'edit_theme_options',
-		'type'       => 'option',
-	));
-
-	$wp_customize->add_control('cahnrs_tooling', array(
-		'label'      => 'CAHNRS Tooling Version',
-		'section'    => 'section_spine_advanced_options',
-		'settings'   => 'spine_options[cahnrs_tooling]',
-		'type'       => 'select',
-		'choices'    => array(
-			'0'  => '0',
-			//'develop' => 'develop',
-			'disable' => 'disable'
-		),
-	));
-
-	$wp_customize->add_setting('spine_options[cahnrs_fixed_header_behavior]', array(
-		'default'    => '',
-		'capability' => 'edit_theme_options',
-		'type'       => 'option',
-	));
-
-	$wp_customize->add_control('cahnrs_fixed_header_behavior', array(
-		'label'      => 'Disable Fixed CAHNRS Header JS',
-		'section'    => 'section_spine_advanced_options',
-		'settings'   => 'spine_options[cahnrs_fixed_header_behavior]',
-		'type'       => 'checkbox',
 	));*/
 
 }
