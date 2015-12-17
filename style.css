@@ -8,9 +8,9 @@ Template: spine
 */
 
 /* CAHNRS header overrides */
-.extension-signature .cahnrs-header-group {
+/*.extension-signature .cahnrs-header-group {
 	border-top-color: #981e32;
-}
+}*/
 .home .main-header {
 	height: 142px;
 }
@@ -42,6 +42,9 @@ body:not(.home) .cahnrs-header-group:before,
 body:not(.home) .cahnrs-header-group:after,
 .quicklinks dl {
 	background: #532400;
+	background: #5e6a71;
+	background: #464e54;
+	background: #2a3033;
 }
 .home .quicklinks {
 	padding-top: 0;
@@ -59,7 +62,7 @@ body:not(.home) .cahnrs-header-group:after,
 	box-sizing: border-box;
 	height: 128px;
 	overflow: hidden;
-	position: fixed;
+	position: absolute;
 	right: 0;
 	top: 56px;
 	z-index: 99164;
@@ -82,7 +85,6 @@ body:not(.home) .cahnrs-header-group:after,
 	background: #981e32;
 	color: #fff;
 	display: block;
-	font-weight: bold;
 	padding: 0.3rem 1rem;
 	position: relative;
   top: 50%;
@@ -92,7 +94,7 @@ body:not(.home) .cahnrs-header-group:after,
 	background: #c60c30;
 }
 
-/* Contact shortcode */
+/* Contact info */
 .county-contact p {
 	padding-bottom: 0;
 }
@@ -100,8 +102,109 @@ body:not(.home) .cahnrs-header-group:after,
 	font-weight: bold;
 	padding-bottom: 0.5rem;
 }
-.county-contact .unit-hours {
-	padding-top: 1rem;
+.county-contact p:nth-last-child(2) {
+	padding-bottom: 0.5rem;
+}
+
+/* Contact form (maybe move to own stylesheet) */
+.county-contact-form {
+	margin: 0;
+	padding: 0 0 1rem 0;
+}
+.county-contact-form h2 {
+	padding-top: 0;
+}
+.county-contact-form p {
+	padding-bottom: 0.5rem;
+}
+.county-contact-form .screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	overflow: hidden;
+	position: absolute !important;
+	width: 1px;
+}
+.county-contact-form .error {
+	color: #981e32;
+	font-style: italic;
+}
+.county-contact-form .basic-field,
+.county-contact-form.error .basic-field {
+	background: #fff;
+	border-radius: 1px;
+	border: 1px solid #5e6a71;
+	box-sizing: border-box;
+	color: #8d959a;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 1.1em;
+	height: 2rem;
+	line-height: 20px;
+	margin: 0;
+	padding: 0.5rem;
+	width: 100%;
+	-webkit-appearance: textfield;
+}
+.county-contact-form.error .basic-field:invalid {
+	border: 1px solid #981e32;
+}
+.county-contact-form .basic-field:focus {
+	color: #981e32;
+}
+.county-contact-form .basic-field::-webkit-input-placeholder {
+	color: #8d959a;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	font-style: italic;
+}
+.county-contact-form .basic-field:-moz-placeholder {
+	color: #8d959a;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	font-style: italic;
+	opacity: 1;
+}
+.county-contact-form .basic-field::-moz-placeholder {
+	color: #8d959a;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	font-style: italic;
+	opacity: 1;
+}
+.county-contact-form .basic-field:-ms-input-placeholder {  
+	color: #8d959a;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	font-style: italic;
+}
+.county-contact-form label[for="contact-message"] {
+	color: #8d959a;
+	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
+	padding-left: 0.5rem;
+}
+.county-contact-form textarea {
+	background: #fff;
+	border-radius: 1px;
+	border: 1px solid #5e6a71;
+	color: #8d959a;
+}
+.county-contact-form input[type=submit] {
+	border-radius: 1px;
+	background: #981e32;
+	border: 0;
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: bold;
+	padding: 0.75em 1.5em;
+	width: 100%;
+}
+.county-contact-form input[type=submit]:hover {
+	background: #c60c30;
+}
+.county-contact-form input[type=submit]:active,
+.county-contact-form input[type=submit]:focus {
+	background: #5e6a71;
 }
 
 /* Program icon */
@@ -134,6 +237,7 @@ body:not(.home) .cahnrs-header-group:after,
 	.home.logged-in .actions-footer {
 		bottom: 0;
 		height: auto;
+		position: fixed;
 		right: auto;
 		top: auto;
 		width: 100%;

@@ -2,10 +2,6 @@
 
 include_once( __DIR__ . '/includes/customizer.php' ); // Include CAHNRS customizer functionality.
 include_once( __DIR__ . '/includes/widgets/county-actions.php' ); // Set up the widget used to display the actions footer area.
-include_once( __DIR__ . '/includes/shortcodes/landing-page-showcase.php' ); // Landing page showcase shortcode.
-include_once( __DIR__ . '/includes/shortcodes/slideshow.php' ); // Slideshow shortcode.
-include_once( __DIR__ . '/includes/shortcodes/search-form.php' ); // Search form shortcode.
-include_once( __DIR__ . '/includes/shortcodes/contact-info.php' ); // Contact shortcode.
 
 /**
  * Set up a theme hook for the site header.
@@ -17,25 +13,27 @@ function cahnrswp_site_header() {
 class WSU_Extension_Property_Theme {
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'init', array( $this, 'remove_header_meta' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_scripts' ), 21 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'additional_scripts' ), 21 );
 		add_action( 'cahnrswp_site_header', array( $this, 'cahnrswp_default_header' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 1 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
-		add_filter( 'mce_buttons_2', array( $this, 'mce_buttons_2' ) );
+		add_filter( 'tiny_mce_plugins', array( $this, 'disable_emojis_tinymce' ) );
 		add_filter( 'mce_external_plugins', array( $this, 'mce_external_plugins' ) );
+		add_filter( 'mce_buttons_2', array( $this, 'mce_buttons_2' ) );
 		add_filter( 'theme_page_templates', array( $this, 'theme_page_templates' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_action( 'widgets_init', array( $this, 'widgets_init' ) );
+		add_filter( 'cwpb_register_items', array( $this, 'county_pagebuilder_items' ) );
 	}
 
 	/**
  	 * Remove certain things Wordpress adds to the header.
  	 */
-	public function init() {
+	public function remove_header_meta() {
 		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
@@ -54,21 +52,6 @@ class WSU_Extension_Property_Theme {
 		remove_action( 'wp_head', 'wp_shortlink_wp_head', 10, 0 );
 		remove_action( 'wp_head', 'rel_canonical');
 		remove_action( 'wp_head', 'wp_generator' );
-		add_filter( 'tiny_mce_plugins', array( $this, 'disable_emojis_tinymce' ) );
-	}
-
-	/**
-	 * Filter function to remove the tinymce emoji plugin.
-	 *
-	 * @param array $plugins
-	 * @return array Difference betwen the two arrays
-	 */
-	public function disable_emojis_tinymce( $plugins ) {
-		if ( is_array( $plugins ) ) {
-			return array_diff( $plugins, array( 'wpemoji' ) );
-		} else {
-			return array();
-		}
 	}
 
 	/**
@@ -87,10 +70,19 @@ class WSU_Extension_Property_Theme {
 	}
 
 	/**
-	 * Dequeue Spine Bookmark stylesheet (only a precaution) and empty child theme stylesheet.
+	 * Dequeue Spine Bookmark stylesheet (only a precaution).
+	 * Enqueue styles and scripts for shortcodes.
 	 */
-	public function dequeue_scripts() {
+	public function additional_scripts() {
 		wp_dequeue_style( 'spine-theme-extra' );
+		$post = get_post();
+		if ( is_singular() && is_front_page() && has_shortcode( $post->post_content, 'county_showcase' ) ) {
+			wp_enqueue_style( 'cahnrswp-extension-county-showcase', get_stylesheet_directory_uri() . '/css/showcase.css' );
+		}
+		if ( is_singular() && has_shortcode( $post->post_content, 'county_slideshow' ) ) {
+			wp_enqueue_style( 'cahnrswp-extension-county-slideshow', get_stylesheet_directory_uri() . '/css/slideshow.css' );
+			wp_enqueue_script( 'wsu-cycle', get_template_directory_uri() . '/js/cycle2/jquery.cycle2.min.js', array( 'jquery' ), spine_get_script_version(), true );
+		}
 	}
 
 	/**
@@ -268,15 +260,26 @@ class WSU_Extension_Property_Theme {
 	}
 
 	/**
-	 * Add Table controls to tinyMCE editor.
+	 * Filter function to remove the tinymce emoji plugin.
+	 *
+	 * @param array $plugins The list of default TinyMCE plugins.
+	 *
+	 * @return array Modified list of default TinyMCE plugins.
 	 */
-	public function mce_buttons_2( $buttons ) {
-		array_push( $buttons, 'table' );
-		return $buttons;
+	public function disable_emojis_tinymce( $plugins ) {
+		if ( is_array( $plugins ) ) {
+			return array_diff( $plugins, array( 'wpemoji' ) );
+		} else {
+			return array();
+		}
 	}
 
 	/**
 	 * Register the tinyMCE Table plugin.
+	 *
+	 * @param array $plugin_array The list of TinyMCE external plugins.
+	 *
+	 * @return array Modified list of TinyMCE external plugins.
 	 */
 	public function mce_external_plugins( $plugin_array ) {
 		$plugin_array['table'] = get_stylesheet_directory_uri() . '/tinymce/table-plugin.min.js';
@@ -284,10 +287,26 @@ class WSU_Extension_Property_Theme {
 	}
 
 	/**
-	 * Remove most of the Spine page templates.
+	 * Add Table controls to tinyMCE editor.
+	 *
+	 * @param array $buttons The list of second-row TinyMCE buttons (Visual tab).
+	 *
+	 * @return array Modified list of second-row TinyMCE buttons.
+	 */
+	public function mce_buttons_2( $buttons ) {
+		array_push( $buttons, 'table' );
+		return $buttons;
+	}
+
+	/**
+	 * Remove the Spine page templates.
+	 *
+	 * @param array $templates The list of page templates from the Spine theme.
+	 *
+	 * @return array Modified list of page templates.
 	 */
 	public function theme_page_templates( $templates ) {
-		//unset( $templates['templates/blank.php'] );
+		unset( $templates['templates/blank.php'] );
 		unset( $templates['templates/halves.php'] );
 		unset( $templates['templates/margin-left.php'] );
 		unset( $templates['templates/margin-right.php'] );
@@ -299,7 +318,11 @@ class WSU_Extension_Property_Theme {
 	}
 
 	/**
-	 * Body classes.
+	 * Add custom body classes.
+	 *
+	 * @param array $classes Current list of body classes.
+	 *
+	 * @return array Modified list of body classes.
 	 */
 	public function body_class( $classes ) {
 		if ( get_post_meta( get_the_ID(), 'body_class', true ) ) {
@@ -323,6 +346,45 @@ class WSU_Extension_Property_Theme {
 			'description'   => 'Displays the action links on the top of every page.',
 		);
 		register_sidebar( $widget_options );
+	}
+
+	/**
+	 *
+	 */
+	public function county_pagebuilder_items( $items ) {
+
+		$items['county_contact_form'] = array(
+			'class'   => 'Item_County_Contact_Form_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/contact-form.php',
+			'priority'  => 0,
+		);
+		$items['county_contact_info'] = array(
+			'class'   => 'Item_County_Contact_Info_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/contact-info.php',
+			'priority'  => 0,
+		);
+		$items['county_site_search_form'] = array(
+			'class'   => 'Item_County_Site_Search_Form_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/search-form.php',
+			'priority'  => 0,
+		);
+		$items['county_showcase'] = array(
+			'class'   => 'Item_County_Showcase_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/showcase.php',
+			'priority'  => 0,
+		);
+		$items['county_slideshow'] = array(
+			'class'   => 'Item_County_Slideshow_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/slideshow.php',
+			'priority'  => 0,
+		);
+		$items['county_social_media_feed'] = array(
+			'class'   => 'Item_County_Social_Media_Feed_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/social-media-feed.php',
+			'priority'  => 0,
+		);
+
+		return $items;
 	}
 
 }

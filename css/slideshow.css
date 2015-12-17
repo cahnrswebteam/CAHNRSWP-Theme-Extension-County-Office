@@ -14,7 +14,7 @@
 	bottom: 0;
 	box-sizing: border-box;
 	color: #fff;
-	padding: 0.5rem 0.5rem 3.5rem 0.5rem;
+	padding: 0.5rem;
 	position: absolute;
 	transition: background-color .2s ease-in-out;
 	width: 100%;
@@ -29,23 +29,16 @@
 	padding: 0;
 }
 .cycle-pager {
-	bottom: 0;
-	height: 1rem;
-	padding: 1rem 0;
-	position: absolute;
+	color: #d7dadb;
+	font-size: 3rem;
+	line-height: 1;
 	text-align: center;
-	width: 100%;
-	z-index: 101;
 }
 .cycle-pager span {
 	cursor: pointer;
-	display: inline-block;
-	font-size: 3rem;
-	line-height: 0;
-	height: 1rem;
-	vertical-align: middle;
+	margin: 0.25rem;
 }
 .cycle-pager span:hover,
 .cycle-pager-active {
-	color: #fff;
+	color: #23282b;
 }
