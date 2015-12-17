@@ -98,7 +98,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 						endwhile;
 					endif;
 					wp_reset_postdata();
-				} /*elseif ( 'manual' === $atts['feature_source'] ) {
+				} elseif ( 'manual' === $atts['source'] ) {
 					$items = json_decode( $atts['items'], true );
 					if ( is_array( $items ) ) {
 						foreach ( $items as $item ) {
@@ -108,11 +108,11 @@ class Item_County_Slideshow_PB extends Item_PB {
 								$title = $item['title'];
 								//$excerpt = '<p>' . $item['excerpt'] . '</p>';
 								include( __DIR__ . '/feature-item.php' );
-								unset( $image, $permalink, $title/*, $excerpt*//* );
+								unset( $image, $permalink, $title/*, $excerpt*/ );
 							}
 						}
 					}
-				}*/
+				}
 			?>
 
 			<div class="cycle-pager"></div>
@@ -212,9 +212,9 @@ class Item_County_Slideshow_PB extends Item_PB {
 			$clean['posts_per_page'] = sanitize_text_field( $atts['posts_per_page'] );
 		}
 
-		/*if ( ! empty( $atts['items'] ) ) {
-			
-		}*/
+		if ( ! empty( $atts['items'] ) ) {
+			$clean['items'] = sanitize_text_field( $atts['items'] );
+		}
 
 		return $clean;
 

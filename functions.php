@@ -98,7 +98,8 @@ class WSU_Extension_Property_Theme {
 	public function admin_enqueue_scripts( $hook ) {
 		$screen = get_current_screen();
 		if ( ( 'post-new.php' === $hook || 'post.php' === $hook ) && 'page' === $screen->post_type ) {
-			wp_enqueue_style( 'admin-page', get_stylesheet_directory_uri() . '/css/admin-page.css' );
+			wp_enqueue_style( 'program-info', get_stylesheet_directory_uri() . '/css/admin-program-info.css' );
+			wp_enqueue_script( 'program-info', get_stylesheet_directory_uri() . '/js/admin-program-info.js', array( 'jquery' ) );
 		}
 	}
 
@@ -125,14 +126,19 @@ class WSU_Extension_Property_Theme {
 			'side',
 			'default'
 		);
-		add_meta_box(
-			'cahnrswp_county_program_info',
-			'Program Information',
-			array ( $this, 'cahnrswp_county_program_info' ),
-			'page',
-			'after_title',
-			'default'
-		);
+		// This works.
+		/*$post_id = $_GET['post'] ? $_GET['post'] : $_POST['post_ID'] ;
+		$template = get_post_meta( $post_id, '_wp_page_template', TRUE );
+		if ( 'templates/program.php' === $template ) {*/
+			add_meta_box(
+				'cahnrswp_county_program_info',
+				'Program Information',
+				array ( $this, 'cahnrswp_county_program_info' ),
+				'page',
+				'after_title',
+				'default'
+			);
+		//}
 	}
 
 	/**

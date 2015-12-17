@@ -1,3 +1,10 @@
+<?php
+
+/* Template Name: Program */
+// Provides an area for specialist contact information and an icon.
+
+?>
+
 <?php get_header(); ?>
 
 	<main class="spine-blank-template">
@@ -11,13 +18,7 @@
 
 			<div id="page-<?php the_ID(); ?>" <?php post_class( 'builder-layout' ); ?>>
 
-				<?php if ( ! is_front_page() ) : ?>
-				<header class="article-header">
-					<h1 class="article-title"><?php the_title(); ?></h1>
-				</header>
-				<?php endif; ?>
-
-				<?php the_content(); ?>
+				<?php get_template_part( 'articles/program-page-content' ); ?>
 
 			</div>
 
@@ -29,13 +30,7 @@
 
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-						<?php if ( ! is_front_page() ) : ?>
-						<header class="article-header">
-							<h1 class="article-title"><?php the_title(); ?></h1>
-						</header>
-						<?php endif; ?>
-
-						<?php the_content(); ?>
+						<?php get_template_part( 'articles/program-page-content' ); ?>
 
 					</article>
 

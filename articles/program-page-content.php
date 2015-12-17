@@ -1,12 +1,11 @@
 <?php
-	//$hide_title = get_post_meta( get_the_ID(), '_cahnrswp_hide_title', true );
 	$program_contact_specialist = get_post_meta( get_the_ID(), '_cahnrswp_program_specialist', true );
 	$program_contact_phone = get_post_meta( get_the_ID(), '_cahnrswp_program_phone', true );
 	$program_contact_email = get_post_meta( get_the_ID(), '_cahnrswp_program_email', true );
 	$program_icon = get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true );
 ?>
 
-<?php if ( ! is_front_page() /*&& ! $hide_title*/ ) : ?>
+<?php if ( ! is_front_page() ) : ?>
 <header class="article-header">
 	<?php if ( $program_icon ) : ?><img src="<?php echo esc_url( $program_icon ); ?>" height="77" width="76" class="extension-program-icon" /><?php endif; ?>
 	<h1 class="article-title"><?php the_title(); ?></h1>
