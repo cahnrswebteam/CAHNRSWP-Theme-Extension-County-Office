@@ -76,12 +76,17 @@ class WSU_Extension_Property_Theme {
 	public function additional_scripts() {
 		wp_dequeue_style( 'spine-theme-extra' );
 		$post = get_post();
-		if ( is_singular() && is_front_page() && has_shortcode( $post->post_content, 'county_showcase' ) ) {
-			wp_enqueue_style( 'cahnrswp-extension-county-showcase', get_stylesheet_directory_uri() . '/css/showcase.css' );
-		}
-		if ( is_singular() && has_shortcode( $post->post_content, 'county_slideshow' ) ) {
-			wp_enqueue_style( 'cahnrswp-extension-county-slideshow', get_stylesheet_directory_uri() . '/css/slideshow.css' );
-			wp_enqueue_script( 'wsu-cycle', get_template_directory_uri() . '/js/cycle2/jquery.cycle2.min.js', array( 'jquery' ), spine_get_script_version(), true );
+		if ( is_singular() ) {
+			if ( is_front_page() && has_shortcode( $post->post_content, 'county_showcase' ) ) {
+				wp_enqueue_style( 'cahnrswp-extension-county-showcase', get_stylesheet_directory_uri() . '/css/showcase.css' );
+			}
+			if ( has_shortcode( $post->post_content, 'county_slideshow' ) ) {
+				wp_enqueue_style( 'cahnrswp-extension-county-slideshow', get_stylesheet_directory_uri() . '/css/slideshow.css' );
+				wp_enqueue_script( 'wsu-cycle', get_template_directory_uri() . '/js/cycle2/jquery.cycle2.min.js', array( 'jquery' ), spine_get_script_version(), true );
+			}
+			if ( has_shortcode( $post->post_content, 'county_social_media_feed' ) ) {
+				wp_enqueue_script( 'facebook-page-plugin', '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5', array(), spine_get_script_version(), true );
+			}
 		}
 	}
 
@@ -97,9 +102,12 @@ class WSU_Extension_Property_Theme {
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 		$screen = get_current_screen();
-		if ( ( 'post-new.php' === $hook || 'post.php' === $hook ) && 'page' === $screen->post_type ) {
-			wp_enqueue_style( 'program-info', get_stylesheet_directory_uri() . '/css/admin-program-info.css' );
-			wp_enqueue_script( 'program-info', get_stylesheet_directory_uri() . '/js/admin-program-info.js', array( 'jquery' ) );
+		if ( ( 'post-new.php' === $hook || 'post.php' === $hook ) ) {
+			wp_enqueue_style( 'county-pagebuilder-items', get_stylesheet_directory_uri() . '/css/admin-pagebuilder-items.css' );
+			if ( 'page' === $screen->post_type ) {
+				wp_enqueue_style( 'program-info', get_stylesheet_directory_uri() . '/css/admin-program-info.css' );
+				wp_enqueue_script( 'program-info', get_stylesheet_directory_uri() . '/js/admin-program-info.js', array( 'jquery' ) );
+			}
 		}
 	}
 

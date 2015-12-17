@@ -59,8 +59,6 @@ class Item_County_Contact_Info_PB extends Item_PB {
 	/**
 	 * Editor markup.
 	 *
-	 * @param $atts Shortcode attributes. 
-	 *
 	 * @return string
 	 */
 	public function editor() {
@@ -79,7 +77,7 @@ class Item_County_Contact_Info_PB extends Item_PB {
 			<p class="unit-contact"><a href="<?php echo esc_url( $contact_point ); ?>"><?php echo esc_html( spine_get_option( 'contact_ContactPointTitle' ) ); ?></a></p>
 			<?php endif; ?>
 			<?php $empty = array( ' ', '&nbsp;' ); ?>
-			<?php echo ( $this->content && ! in_array( $this->content, $empty ) ) ? $this->content : '<div class="cpb-empty">Click to add hours of operation</div>'; ?>
+			<?php echo ( $this->content && ! in_array( $this->content, $empty ) ) ? $this->content : '<p class="cpb-empty">(Click to add hours of operation)</p>'; ?>
 		</div>
 		<?php
 		$html = ob_get_contents();

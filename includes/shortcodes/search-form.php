@@ -14,7 +14,7 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 	/**
 	 * @var string Description for displaying in Pagebuilder interface.
 	 */
-	public $desc = '';
+	public $desc = 'A field for searching your site.';
 
 	/**
 	 * @var string Size of GUI for Pagebuilder.
@@ -52,7 +52,15 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 	 */
 	public function editor() {
 
-		$html = 'Search form';
+		ob_start();
+		?>
+		<div class="cahnrs-search">
+    	<div class="cahnrs-search-field">Search</div>
+    	<div class="cahnrs-search-submit"><span class="dashicons dashicons-search"></span></div>
+		</div>
+		<?php
+		$html = ob_get_contents();
+		ob_end_clean();
 
 		return $html;
 

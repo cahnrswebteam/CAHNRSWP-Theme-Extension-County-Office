@@ -70,19 +70,19 @@ class Item_County_Contact_Form_PB extends Item_PB {
 
 			<p>
 				<label>
-					<span class="screen-reader-text">Your Name</span>
-					<input type="text" pattern="[a-zA-Z ]+" name="contact-name" placeholder="Your Name" class="basic-field" required="required" value="<?php echo ( isset( $_POST['contact-name'] ) ? esc_attr( $_POST['contact-name'] ) : '' ); ?>" />
+					<span class="screen-reader-text">Your name</span>
+					<input type="text" pattern="[a-zA-Z ]+" name="contact-name" placeholder="Your name" class="basic-field" required="required" value="<?php echo ( isset( $_POST['contact-name'] ) ? esc_attr( $_POST['contact-name'] ) : '' ); ?>" />
 				</label>
 			</p>
 
 			<p>
 				<label>
-					<span class="screen-reader-text">Your Email Address</span>
-					<input type="email" id="contact-email" name="contact-email" placeholder="Your Email Address" class="basic-field" required="required" value="<?php echo ( isset( $_POST['contact-email'] ) ? esc_attr( $_POST['contact-email'] ) : '' ); ?>" />
+					<span class="screen-reader-text">Your email address</span>
+					<input type="email" id="contact-email" name="contact-email" placeholder="Your email address" class="basic-field" required="required" value="<?php echo ( isset( $_POST['contact-email'] ) ? esc_attr( $_POST['contact-email'] ) : '' ); ?>" />
 				</label>
 			</p>
 
-			<p><label for="contact-message">Whaddaya want?</label><br />
+			<p><label for="contact-message">How can we help?</label><br />
 			<textarea id="contact-message" name="contact-message"><?php echo ( isset( $_POST['contact-message'] ) ? stripslashes( wp_kses_post( $_POST['contact-message'] ) ) : '' ); ?></textarea></p>
 
 			<input type="submit" id="submit" name="submit" value="Submit" />
@@ -105,7 +105,7 @@ class Item_County_Contact_Form_PB extends Item_PB {
 
 			$to = sanitize_email( $recipient );
 			$subject = sanitize_text_field( $subject );
-			$message = 'Message...';
+			$message = $content;
 			$headers = "From: $name <$email>" . "\r\n";
 
 			// If email has been processed for sending, display a success message.
@@ -141,7 +141,19 @@ class Item_County_Contact_Form_PB extends Item_PB {
 	 */
 	public function editor( $atts ) {
 
-		$html = 'Contact Form';
+		ob_start();
+		?>
+		<div class="county-contact-form">
+			<h2>Contact Us</h2>
+			<div>Your name</div>
+			<div>Your email address</div>
+			<p>How can we help?</p>
+			<textarea id="contact-message" name="contact-message"></textarea>
+			<div class="county-contact-form-submit">Submit</div>
+		</div>
+		<?php
+		$html = ob_get_contents();
+		ob_end_clean();
 
 		return $html;
 
