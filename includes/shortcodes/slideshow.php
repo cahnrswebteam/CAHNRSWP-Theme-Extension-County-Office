@@ -103,7 +103,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 					if ( is_array( $items ) ) {
 						foreach ( $items as $item ) {
 							if ( $item['img'] ) {
-								$image = $item['img'];
+								$image = $item['img']['img_src'];
 								$permalink = $item['link'];
 								$title = $item['title'];
 								//$excerpt = '<p>' . $item['excerpt'] . '</p>';
@@ -150,7 +150,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 	 */
 	public function form( $atts ) {
 
-		$html .= $this->accordion_radio(
+		$html = $this->accordion_radio(
 			$this->get_name_field('source'),
 			'feed',
 			$atts['source'],
@@ -168,14 +168,14 @@ class Item_County_Slideshow_PB extends Item_PB {
 			'Select individual posts or pages.'
 		);*/ // Quite possibly made redundant by the manual option
 
-		/*$html .= $this->accordion_radio(
+		$html .= $this->accordion_radio(
 			$this->get_name_field('source'),
 			'manual',
 			$atts['source'],
 			'Manual',
-			'',//Forms_PB::manual_feature( $this->get_name_field(), $atts ),
-			'Build your own slideshow by setting the image, URL, title, and additional text for each slide.'
-		);*/
+			Forms_PB::manual_feature( $this->get_name_field(), $atts ),
+			'Build your own slides.'
+		);
 
 		return $html;
 
@@ -213,7 +213,33 @@ class Item_County_Slideshow_PB extends Item_PB {
 		}
 
 		if ( ! empty( $atts['items'] ) ) {
-			$clean['items'] = sanitize_text_field( $atts['items'] );
+			if ( is_array( $atts['items'] ) ) {
+				$items = '{';
+				$index = 0;
+				foreach ( $atts['items'] as $item ) {
+					$items .= "'" . $index++ . "':{";
+					// This seems to be broken
+					if ( ! empty( $item['img']['img_src'] ) ) {
+						$items .= "'img':{'img_src':'" . sanitize_text_field( $item['img']['img_src'] ) . "','img_id':'" . sanitize_text_field( $item['img']['img_id'] ) . "'},";
+					}
+					if ( ! empty( $item['link'] ) ) {
+						$items .= "'link':'" . sanitize_text_field( $item['link'] ) . "',";
+					}
+					if ( ! empty( $item['title'] ) ) {
+						$items .= "'title':'" . sanitize_text_field( $item['title'] ) . "',";
+					}
+					if ( ! empty( $item['excerpt'] ) ) {
+						$items .= "'excerpt':'" . sanitize_text_field( $item['excerpt'] ) . "'";
+					}
+					$items = rtrim( $items, ',' );
+					$items .= '},';
+				}
+				$items = rtrim( $items, ',' );
+				$items .= '}';
+				$clean['items'] = sanitize_text_field( $items );
+			} else {
+				$clean['items'] = str_replace( "'", '"', $atts['items'] );
+			}
 		}
 
 		return $clean;
