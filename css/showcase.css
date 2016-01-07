@@ -44,19 +44,23 @@
 .landing-page-showcase .county-responsive-media a:hover .article-summary {
 	background-color: rgba(35,40,43,0.95);
 }
+.landing-page-showcase .featured .article-header {
+	top: 1rem;
+}
 .landing-page-showcase .article-title {
 	font-size: 1.1em;
 	line-height: normal;
 	padding: 0;
-}
-.landing-page-showcase .featured .article-header {
-	top: 1rem;
 }
 .landing-page-showcase .article-summary,
 .landing-page-showcase .syndicated .article-header {
 	bottom: 0;
 	box-sizing: border-box;
 	width: 100%;
+}
+.landing-page-showcase .syndicated .article-title {
+	font-size: 1em;
+	font-weight: normal;
 }
 .landing-page-showcase .article-summary p:last-of-type {
 	padding-bottom: 0;
@@ -68,11 +72,15 @@
 		width: 100%;
 	}
 	.landing-page-showcase .featured {
-		margin-bottom: 1rem;
+		margin-bottom: 2rem;
 	}
 	.landing-page-showcase .featured .article-header {
 		bottom: 0;
 		top: auto;
+	}
+	.landing-page-showcase .syndicated .article-title {
+		font-size: 1.1em;
+		font-weight: bold;
 	}
 	.landing-page-showcase .article-summary {
 		display: none;

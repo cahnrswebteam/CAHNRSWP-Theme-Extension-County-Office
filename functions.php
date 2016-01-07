@@ -2,6 +2,7 @@
 
 include_once( __DIR__ . '/includes/customizer.php' ); // Include CAHNRS customizer functionality.
 include_once( __DIR__ . '/includes/widgets/county-actions.php' ); // Set up the widget used to display the actions footer area.
+include_once( __DIR__ . '/includes/feature-item.php' ); // Function for displaying feature items.
 
 /**
  * Set up a theme hook for the site header.
@@ -10,7 +11,7 @@ function cahnrswp_site_header() {
 	do_action( 'cahnrswp_site_header' );
 }
 
-class WSU_Extension_Property_Theme {
+class WSU_Extension_County_Theme {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'remove_header_meta' ) );
@@ -403,4 +404,4 @@ class WSU_Extension_Property_Theme {
 
 }
 
-new WSU_Extension_Property_Theme();
+new WSU_Extension_County_Theme();

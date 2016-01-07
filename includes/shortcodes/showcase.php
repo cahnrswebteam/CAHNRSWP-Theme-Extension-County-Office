@@ -54,7 +54,7 @@ class Item_County_Showcase_PB extends Item_PB {
 			'feature_post_type' => '',
 			'feature_taxonomy'  => '',
 			'feature_terms'     => '',
-			'feature_items'     => '',
+			'items'             => '',
 			'second_source'     => '',
 			'third_source'      => '',
 		);
@@ -104,12 +104,8 @@ class Item_County_Showcase_PB extends Item_PB {
 						if ( is_array( $items ) ) {
 							foreach ( $items as $item ) {
 								if ( $item['img'] ) {
-									$image = $item['img'];
-									$permalink = $item['link'];
-									$title = $item['title'];
 									$excerpt = '<p>' . $item['excerpt'] . '</p>';
-									include( __DIR__ . '/feature-item.php' );
-									unset( $image, $permalink, $title, $excerpt );
+									wsu_extension_county_feature_item( $item['img']['img_src'], $item['link'], $item['title'], $excerpt );
 								}
 							}
 						}
@@ -122,25 +118,18 @@ class Item_County_Showcase_PB extends Item_PB {
 
 				<?php
 					// Probably use WP API for this. RSS would be viable too, I suppose.
-					$syndicated_image_src = 'http://m1.wpdev.cahnrs.wsu.edu/extension-property/wp-content/uploads/sites/18/2015/05/palouse-night-1188x891.jpg';
-					$syndicated_permalink = '#';
-					$syndicated_title = 'Syndicated Content';
-					$image = $syndicated_image_src;
-					$permalink = $syndicated_permalink;
-					$title = $syndicated_title;
-					include( __DIR__ . '/feature-item.php' );
-					unset( $image, $permalink, $title );
+					$syndicated_feature_image = 'http://m1.wpdev.cahnrs.wsu.edu/extension-property/wp-content/uploads/sites/18/2015/05/palouse-night-1188x891.jpg';
+					$syndicated_feature_link = '#';
+					$syndicated_feature_title = 'Syndicated Content';
+					wsu_extension_county_feature_item( $syndicated_feature_image, $syndicated_feature_link, $syndicated_feature_title, NULL );
+					unset( $syndicated_feature_image, $syndicated_feature_link, $syndicated_feature_title ); //dev only
 				?>
 
 				<?php
-					$additional_syndicated_image_src = 'http://m1.wpdev.cahnrs.wsu.edu/cahnrs-property/wp-content/uploads/sites/19/2015/06/palouse-1188x891.jpg';
-					$additional_syndicated_permalink = '#';
-					$additional_syndicated_title = 'Syndicated Contentoo';
-					$image = $additional_syndicated_image_src;
-					$permalink = $additional_syndicated_permalink;
-					$title = $additional_syndicated_title;
-					include( __DIR__ . '/feature-item.php' );
-					unset( $image, $permalink, $title );
+					$syndicated_feature_image = 'http://m1.wpdev.cahnrs.wsu.edu/cahnrs-property/wp-content/uploads/sites/19/2015/06/palouse-1188x891.jpg';
+					$syndicated_feature_link = '#';
+					$syndicated_feature_title = 'More Syndicated Content';
+					wsu_extension_county_feature_item( $syndicated_feature_image, $syndicated_feature_link, $syndicated_feature_title, NULL );
 				?>
 
 			</div>
@@ -201,9 +190,8 @@ class Item_County_Showcase_PB extends Item_PB {
 			'manual',
 			$atts['feature_source'],
 			'Manual',
-			//Forms_PB::manual_feature( $this->get_name_field(), $atts ),
-			Forms_PB::insert_media( $this->get_name_field(), $atts ),
-			'Build your own feature by setting the image, URL, title, and additional text.'
+			Forms_PB::manual_feature( $this->get_name_field(), $atts ),
+			'Build your own feature.'
 		);
 
 		$second_feature = $this->accordion_radio(
@@ -226,8 +214,8 @@ class Item_County_Showcase_PB extends Item_PB {
 
 		$html = array(
 			'Main Feature'   => $feature,
-			//'Second Feature' => $second_feature,
-			//'Third Feature'  => $third_feature,
+			'Second Feature' => $second_feature,
+			'Third Feature'  => $third_feature,
 		);
 
 		return $html;
@@ -262,14 +250,32 @@ class Item_County_Showcase_PB extends Item_PB {
 		}
 
 		if ( ! empty( $atts['items'] ) ) {
-			$clean['items'] = $atts['items'];
-			/*$clean['items'] = array();
-			$item_index = 0;
-			foreach ( $atts['items'] as $manual_item ) {
-				$test_array['items'][ $item_index ][ $manual_item ] = sanitize_text_field( $atts[ $manual_item ] );
-				$item_index++;
+			if ( is_array( $atts['items'] ) ) {
+				$items = '{';
+				$index = 0;
+				foreach ( $atts['items'] as $item ) {
+					$items .= "'" . $index++ . "':{";
+					if ( ! empty( $item['img']['img_src'] ) ) {
+						$items .= "'img':{'img_src':'" . sanitize_text_field( $item['img']['img_src'] ) . "','img_id':'" . sanitize_text_field( $item['img']['img_id'] ) . "'},";
+					}
+					if ( ! empty( $item['link'] ) ) {
+						$items .= "'link':'" . sanitize_text_field( $item['link'] ) . "',";
+					}
+					if ( ! empty( $item['title'] ) ) {
+						$items .= "'title':'" . sanitize_text_field( $item['title'] ) . "',";
+					}
+					if ( ! empty( $item['excerpt'] ) ) {
+						$items .= "'excerpt':'" . sanitize_text_field( $item['excerpt'] ) . "'";
+					}
+					$items = rtrim( $items, ',' );
+					$items .= '},';
+				}
+				$items = rtrim( $items, ',' );
+				$items .= '}';
+				$clean['items'] = sanitize_text_field( $items );
+			} else {
+				$clean['items'] = str_replace( "'", '"', $atts['items'] );
 			}
-			print_r($test_array);*/
 		}
 
 		return $clean;

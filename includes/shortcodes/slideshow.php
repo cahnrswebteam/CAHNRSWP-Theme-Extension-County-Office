@@ -30,7 +30,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 	} */
 
 	/**
-	 * Enqueue scripts and styles for the landing page showcase.
+	 * Enqueue scripts and styles for the slideshow.
 	
 	public function wp_enqueue_scripts() {
 		$post = get_post();
@@ -92,8 +92,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 								$permalink = get_the_permalink();
 								$title = get_the_title();
 								//$excerpt = '<p>' . get_the_excerpt() . '</p>';
-								include( __DIR__ . '/feature-item.php' );
-								unset( $image, $permalink, $title/*, $excerpt*/ );
+								wsu_extension_county_feature_item( $image, $permalink, $title, NULL );
 							}
 						endwhile;
 					endif;
@@ -107,8 +106,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 								$permalink = $item['link'];
 								$title = $item['title'];
 								//$excerpt = '<p>' . $item['excerpt'] . '</p>';
-								include( __DIR__ . '/feature-item.php' );
-								unset( $image, $permalink, $title/*, $excerpt*/ );
+								wsu_extension_county_feature_item( $image, $permalink, $title, NULL );
 							}
 						}
 					}
@@ -218,7 +216,6 @@ class Item_County_Slideshow_PB extends Item_PB {
 				$index = 0;
 				foreach ( $atts['items'] as $item ) {
 					$items .= "'" . $index++ . "':{";
-					// This seems to be broken
 					if ( ! empty( $item['img']['img_src'] ) ) {
 						$items .= "'img':{'img_src':'" . sanitize_text_field( $item['img']['img_src'] ) . "','img_id':'" . sanitize_text_field( $item['img']['img_id'] ) . "'},";
 					}
