@@ -92,7 +92,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 								$permalink = get_the_permalink();
 								$title = get_the_title();
 								//$excerpt = '<p>' . get_the_excerpt() . '</p>';
-								wsu_extension_county_feature_item( $image, $permalink, $title, NULL );
+								wsu_extension_county_feature_item( $image, $permalink, $title, '', false );
 							}
 						endwhile;
 					endif;
@@ -106,7 +106,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 								$permalink = $item['link'];
 								$title = $item['title'];
 								//$excerpt = '<p>' . $item['excerpt'] . '</p>';
-								wsu_extension_county_feature_item( $image, $permalink, $title, NULL );
+								wsu_extension_county_feature_item( $image, $permalink, $title, '', false );
 							}
 						}
 					}

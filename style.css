@@ -271,4 +271,7 @@ body:not(.home) .cahnrs-header-group:after,
 	.main-header sub {
 		font-size: 7.5vw
 	}
+	#binder {
+		padding-bottom: 3rem;
+	}
 }

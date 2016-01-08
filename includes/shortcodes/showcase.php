@@ -50,13 +50,21 @@ class Item_County_Showcase_PB extends Item_PB {
 	public function item( $atts ) {
 
 		$defaults = array(
-			'feature_source'    => '',
-			'feature_post_type' => '',
-			'feature_taxonomy'  => '',
-			'feature_terms'     => '',
-			'items'             => '',
-			'second_source'     => '',
-			'third_source'      => '',
+			'feature_source'          => '',
+			'feature_post_type'       => '',
+			'feature_taxonomy'        => '',
+			'feature_terms'           => '',
+			'items'                   => '',
+			'second_source'           => '',
+			'second_source_url'       => '',
+			'second_source_post_type' => '',
+			'second_source_taxonomy'  => '',
+			'second_source_terms'     => '',
+			'third_source'            => '',
+			'third_source_url'        => '',
+			'third_source_post_type'  => '',
+			'third_source_taxonomy'   => '',
+			'third_source_terms'      => '',
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
@@ -90,11 +98,8 @@ class Item_County_Showcase_PB extends Item_PB {
 								// Only show posts that have a featured image.
 								if ( has_post_thumbnail() ) {
 									$image = wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) );
-									$permalink = get_the_permalink();
-									$title = get_the_title();
 									$excerpt = '<p>' . get_the_excerpt() . '</p>';
-									include( __DIR__ . '/feature-item.php' );
-									unset( $image, $permalink, $title, $excerpt );
+									wsu_extension_county_feature_item( $image, get_the_permalink(), get_the_title(), $excerpt, false );
 								}
 							endwhile;
 						endif;
@@ -105,7 +110,7 @@ class Item_County_Showcase_PB extends Item_PB {
 							foreach ( $items as $item ) {
 								if ( $item['img'] ) {
 									$excerpt = '<p>' . $item['excerpt'] . '</p>';
-									wsu_extension_county_feature_item( $item['img']['img_src'], $item['link'], $item['title'], $excerpt );
+									wsu_extension_county_feature_item( $item['img']['img_src'], $item['link'], $item['title'], $excerpt, false );
 								}
 							}
 						}
@@ -115,21 +120,17 @@ class Item_County_Showcase_PB extends Item_PB {
 			<?php endif; ?>
 
 			<div class="syndicated">
-
+				
 				<?php
-					// Probably use WP API for this. RSS would be viable too, I suppose.
-					$syndicated_feature_image = 'http://m1.wpdev.cahnrs.wsu.edu/extension-property/wp-content/uploads/sites/18/2015/05/palouse-night-1188x891.jpg';
-					$syndicated_feature_link = '#';
-					$syndicated_feature_title = 'Syndicated Content';
-					wsu_extension_county_feature_item( $syndicated_feature_image, $syndicated_feature_link, $syndicated_feature_title, NULL );
-					unset( $syndicated_feature_image, $syndicated_feature_link, $syndicated_feature_title ); //dev only
+					if ( $atts['second_source_url'] ) {
+						$this->remote_query( $atts['second_source_url'], $atts['second_source_post_type'], $atts['second_source_taxonomy'], $atts['second_source_terms'] );
+					}
 				?>
 
 				<?php
-					$syndicated_feature_image = 'http://m1.wpdev.cahnrs.wsu.edu/cahnrs-property/wp-content/uploads/sites/19/2015/06/palouse-1188x891.jpg';
-					$syndicated_feature_link = '#';
-					$syndicated_feature_title = 'More Syndicated Content';
-					wsu_extension_county_feature_item( $syndicated_feature_image, $syndicated_feature_link, $syndicated_feature_title, NULL );
+					if ( $atts['second_source_url'] ) {
+						$this->remote_query( $atts['third_source_url'], $atts['third_source_post_type'], $atts['third_source_taxonomy'], $atts['third_source_terms'] );
+					}
 				?>
 
 			</div>
@@ -199,7 +200,8 @@ class Item_County_Showcase_PB extends Item_PB {
 			'remote_feed',
 			$atts['second_source'],
 			'Feed (Another Site)',
-			Forms_PB::remote_feed( $this->get_name_field(), $atts ),
+			//Forms_PB::remote_feed( $this->get_name_field(), $atts ),
+			$this->syndicated_content( $this->get_name_field(), 'second_source', $atts ),
 			'Most recent posts from another site.'
 		);
 
@@ -208,7 +210,8 @@ class Item_County_Showcase_PB extends Item_PB {
 			'remote_feed',
 			$atts['third_source'],
 			'Feed (Another Site)',
-			Forms_PB::remote_feed( $this->get_name_field(), $atts ),
+			//Forms_PB::remote_feed( $this->get_name_field(), $atts ),
+			$this->syndicated_content( $this->get_name_field(), 'third_source', $atts ),
 			'Most recent posts from another site.'
 		);
 
@@ -278,7 +281,127 @@ class Item_County_Showcase_PB extends Item_PB {
 			}
 		}
 
+		if ( ! empty( $atts['second_source'] ) ) {
+			$clean['second_source'] = sanitize_text_field( $atts['second_source'] );
+		}
+
+		if ( ! empty( $atts['second_source_url'] ) ) {
+			$clean['second_source_url'] = sanitize_text_field( $atts['second_source_url'] );
+		}
+
+		if ( ! empty( $atts['second_source_post_type'] ) ) {
+			$clean['second_source_post_type'] = sanitize_text_field( $atts['second_source_post_type'] );
+		}
+
+		if ( ! empty( $atts['second_source_taxonomy'] ) ) {
+			$clean['second_source_taxonomy'] = sanitize_text_field( $atts['second_source_taxonomy'] );
+		}
+
+		if ( ! empty( $atts['second_source_terms'] ) ) {
+			$clean['second_source_terms'] = sanitize_text_field( $atts['second_source_terms'] );
+		}
+
+		if ( ! empty( $atts['third_source'] ) ) {
+			$clean['third_source'] = sanitize_text_field( $atts['third_source'] );
+		}
+
+		if ( ! empty( $atts['third_source_url'] ) ) {
+			$clean['third_source_url'] = sanitize_text_field( $atts['third_source_url'] );
+		}
+
+		if ( ! empty( $atts['third_source_post_type'] ) ) {
+			$clean['third_source_post_type'] = sanitize_text_field( $atts['third_source_post_type'] );
+		}
+
+		if ( ! empty( $atts['third_source_taxonomy'] ) ) {
+			$clean['third_source_taxonomy'] = sanitize_text_field( $atts['third_source_taxonomy'] );
+		}
+
+		if ( ! empty( $atts['third_source_terms'] ) ) {
+			$clean['third_source_terms'] = sanitize_text_field( $atts['third_source_terms'] );
+		}
+
 		return $clean;
+
+	}
+
+	/**
+	 * Remote Feed pagebuilder GUI.
+	 *
+	 * @param $base_name Field base.
+	 * @param $prefix    Attribute prefix.
+	 * @param $settings  Shortcode attributes.
+	 *
+	 * @return string
+	 */
+	public static function syndicated_content( $base_name, $prefix, $atts ) {
+
+		$html = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'] , 'Site URL (Homepage)' , 'cpb-field-one-column' );
+
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'] , 'Post Type (slug)');
+
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'] , 'Feed By (slug)');
+
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_terms]', $atts[ $prefix . '_terms'] , 'Terms (Name)');
+
+		//$html .= Forms_PB::text_field( $base_name . '[' . $prefix . 'remote_posts_per_page]', $settings['remote_posts_per_page'] , 'Count' , 'cpb-small-field' );
+
+		return $html;
+
+	}
+
+	/**
+	 * Retrieve syndicated content.
+	 *
+	 * @param string $url       Site from which to request the JSON.
+	 * @param string $post_type Type of content to retrieve.
+	 * @param string $taxonomy  Taxonomy to filter by.
+	 * @param string $term      Taxonomy term to filter by.
+	 *
+	 * @return string
+	 */
+	public function remote_query( $url, $post_type, $taxonomy, $term ) {
+
+		$request_url = esc_url( $url . 'wp-json/posts/' );
+		//$request_url = esc_url( $url . 'wp-json/wp/v2/' . esc_html( $post_type ) ); // What the API v2 url might look like.
+
+		$request_url = add_query_arg( 'filter[posts_per_page]', 1, $request_url );
+
+		if ( $post_type ) {
+			$request_url = add_query_arg( 'type', esc_html( $post_type ), $request_url ); // Appropriate escaping here?
+		}
+
+		if ( $taxonomy && $term ) {
+			$request_url = add_query_arg(
+				array(
+					'filter[taxonomy]' => esc_html( $taxonomy ),
+					'filter[term]' => esc_html( $term ),
+				),
+				$request_url
+			);
+		}
+
+		$response = wp_remote_get( $request_url );
+
+		$data = wp_remote_retrieve_body( $response );
+
+		if ( ! empty( $data ) ) {
+
+			$posts = json_decode( $data );
+
+			foreach( $posts as $post ) {
+
+				$image = $post->featured_image->attachment_meta->sizes->{'spine-medium_size'}->url; // API v2: to come...
+				$link = esc_html( $post->link );
+				$title = esc_html( $post->title ); // API v2: $post->title->rendered
+
+				
+
+				wsu_extension_county_feature_item( $image, $link, $title, '', true );
+
+			}
+
+		}
 
 	}
 
