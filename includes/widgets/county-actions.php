@@ -3,27 +3,41 @@
 class County_Actions_Widget extends WP_Widget {
 
 	/**
-	 * Register the widget officially through the parent class.
+	 * Register widget.
 	 */
 	public function __construct() {
-		parent::__construct( 'county_actions_widget', 'Action Links', array( 'description' => '' ) );
+		parent::__construct(
+			'county_actions_widget', // Base ID
+			'Action Buttons', // Name
+			array(
+				'description' => 'Sitewide action buttons',
+			)
+		);
 	}
 
 	/**
 	 * Outputs the content of the widget
 	 *
-	 * @param array $args
-	 * @param array $instance
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
 	 *
 	 * @todo All three actions in one widget, possibly provide a way to hide the object.
 	 */
 	public function widget( $args, $instance ) {
-		$default_instance = array(
-			'action_url' => 'visit',
-			'action_text' => 'visit',
-		);
-		$instance = shortcode_atts( $default_instance, $instance );
-		?><div class="action-item"><a href="<?php echo esc_url( $instance['action_url'] ); ?>"><?php echo esc_html( $instance['action_text'] ); ?></a></div><?php
+		
+
+		if ( ! empty( $instance['first_action_url'] ) && ! empty( $instance['first_action_name'] ) ) :
+		?><div class="action-item"><a href="<?php echo esc_url( $instance['first_action_url'] ); ?>"><?php echo esc_html( $instance['first_action_name'] ); ?></a></div><?php
+    endif;
+
+		if ( ! empty( $instance['second_action_url'] ) && ! empty( $instance['second_action_name'] ) ) :
+		?><div class="action-item"><a href="<?php echo esc_url( $instance['second_action_url'] ); ?>"><?php echo esc_html( $instance['second_action_name'] ); ?></a></div><?php
+    endif;
+
+		if ( ! empty( $instance['third_action_url'] ) && ! empty( $instance['third_action_name'] ) ) :
+		?><div class="action-item"><a href="<?php echo esc_url( $instance['third_action_url'] ); ?>"><?php echo esc_html( $instance['third_action_name'] ); ?></a></div><?php
+    endif;
+
 	}
 
 	/**
@@ -36,17 +50,36 @@ class County_Actions_Widget extends WP_Widget {
 	 * @todo All three actions in one widget.
 	 */
 	public function form( $instance ) {
-		$action_url = ! empty( $instance['action_url'] ) ? $instance['action_url'] : '';
-		$action_text = ! empty( $instance['action_text'] ) ? $instance['action_text'] : '';
-
+		$first_action_url = ! empty( $instance['first_action_url'] ) ? $instance['first_action_url'] : '';
+		$first_action_name = ! empty( $instance['first_action_name'] ) ? $instance['first_action_name'] : '';
+		$second_action_url = ! empty( $instance['second_action_url'] ) ? $instance['second_action_url'] : '';
+		$second_action_name = ! empty( $instance['second_action_name'] ) ? $instance['second_action_name'] : '';
+		$third_action_url = ! empty( $instance['third_action_url'] ) ? $instance['third_action_url'] : '';
+		$third_action_name = ! empty( $instance['third_action_name'] ) ? $instance['third_action_name'] : '';
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'action_url' ); ?>">Action URL</label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'action_url' ); ?>" name="<?php echo $this->get_field_name( 'action_url' ); ?>" type="text" value="<?php echo esc_attr( $action_url ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'first_action_url' ); ?>">First Action URL</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'first_action_url' ); ?>" name="<?php echo $this->get_field_name( 'first_action_url' ); ?>" type="text" value="<?php echo esc_attr( $first_action_url ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'action_text' ); ?>">Action Text</label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'action_text' ); ?>" name="<?php echo $this->get_field_name( 'action_text' ); ?>" type="text" value="<?php echo esc_attr( $action_text ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'first_action_name' ); ?>">First Action Name</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'first_action_name' ); ?>" name="<?php echo $this->get_field_name( 'first_action_name' ); ?>" type="text" value="<?php echo esc_attr( $first_action_name ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'second_action_url' ); ?>">Second Action URL</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'second_action_url' ); ?>" name="<?php echo $this->get_field_name( 'second_action_url' ); ?>" type="text" value="<?php echo esc_attr( $second_action_url ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'second_action_name' ); ?>">Second Action Name</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'second_action_name' ); ?>" name="<?php echo $this->get_field_name( 'second_action_name' ); ?>" type="text" value="<?php echo esc_attr( $second_action_name ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'third_action_url' ); ?>">Third Action URL</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'third_action_url' ); ?>" name="<?php echo $this->get_field_name( 'third_action_url' ); ?>" type="text" value="<?php echo esc_attr( $third_action_url ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'third_action_name' ); ?>">Third Action Name</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'third_action_name' ); ?>" name="<?php echo $this->get_field_name( 'third_action_name' ); ?>" type="text" value="<?php echo esc_attr( $third_action_name ); ?>" />
 		</p>
 		<?php
 	}
@@ -61,8 +94,12 @@ class County_Actions_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
-		$instance['action_url'] = ( ! empty( $new_instance['action_url'] ) ) ? sanitize_text_field( $new_instance['action_url'] ) : '';
-		$instance['action_text'] = ( ! empty( $new_instance['action_text'] ) ) ? sanitize_text_field( $new_instance['action_text'] ) : '';
+		$instance['first_action_url'] = ( ! empty( $new_instance['first_action_url'] ) ) ? sanitize_text_field( $new_instance['first_action_url'] ) : '';
+		$instance['first_action_name'] = ( ! empty( $new_instance['first_action_name'] ) ) ? sanitize_text_field( $new_instance['first_action_name'] ) : '';
+		$instance['second_action_url'] = ( ! empty( $new_instance['second_action_url'] ) ) ? sanitize_text_field( $new_instance['second_action_url'] ) : '';
+		$instance['second_action_name'] = ( ! empty( $new_instance['second_action_name'] ) ) ? sanitize_text_field( $new_instance['second_action_name'] ) : '';
+		$instance['third_action_url'] = ( ! empty( $new_instance['third_action_url'] ) ) ? sanitize_text_field( $new_instance['third_action_url'] ) : '';
+		$instance['third_action_name'] = ( ! empty( $new_instance['third_action_name'] ) ) ? sanitize_text_field( $new_instance['third_action_name'] ) : '';
 
 		return $instance;
 	}

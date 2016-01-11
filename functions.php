@@ -28,6 +28,7 @@ class WSU_Extension_County_Theme {
 		add_filter( 'theme_page_templates', array( $this, 'theme_page_templates' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_action( 'widgets_init', array( $this, 'widgets_init' ) );
+		add_action( 'sidebars_widgets', array( $this, 'restrict_site_actions' ) );
 		add_filter( 'cwpb_register_items', array( $this, 'county_pagebuilder_items' ) );
 	}
 
@@ -109,6 +110,9 @@ class WSU_Extension_County_Theme {
 				wp_enqueue_style( 'program-info', get_stylesheet_directory_uri() . '/css/admin-program-info.css' );
 				wp_enqueue_script( 'program-info', get_stylesheet_directory_uri() . '/js/admin-program-info.js', array( 'jquery' ) );
 			}
+		}
+		if ( 'widgets.php' == $hook ) {
+			wp_enqueue_script( 'restrict-site-actions', get_stylesheet_directory_uri() . '/js/admin-site-actions-sidebar.js', array( 'jquery' ) );
 		}
 	}
 
@@ -358,13 +362,35 @@ class WSU_Extension_County_Theme {
 		$widget_options = array(
 			'name'          => 'Site Actions',
 			'id'            => 'county-actions',
-			'description'   => 'Displays the action links on the top of every page.',
+			'description'   => 'Displays action buttons on the top of every page. Accepts only one "Action Buttons" widget.',
 		);
 		register_sidebar( $widget_options );
 	}
 
 	/**
+	 * Limit "Site Actions" sidebar to only a single "County Actions" widget.
+	 */
+	public function restrict_site_actions( $sidebars_widgets ) {
+  	if ( ! empty( $sidebars_widgets['county-actions'] ) ) {
+    	foreach ( $sidebars_widgets['county-actions'] as $k => $v ) {
+				if ( 'county_actions_widget' === substr( $v, 0, 21 ) ) {
+					array_unshift( $sidebars_widgets['county-actions'], $v );
+					break;
+				}
+    	}
+			$sidebars_widgets['county-actions'] = array(
+				0 => reset( $sidebars_widgets['county-actions'] ),
+			);
+  	}
+  	return $sidebars_widgets;
+	}
+
+	/**
+	 * Include custom shortcodes in Pagebuilder.
 	 *
+	 * @param array $items Pagebuilder items.
+	 *
+	 * @return array $items Modified array of Pagebuilder items.
 	 */
 	public function county_pagebuilder_items( $items ) {
 
