@@ -177,14 +177,14 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Most recent post or page, optionally based on categories or tags.'
 		);
 
-		$feature .= $this->accordion_radio(
+		/*$feature .= $this->accordion_radio(
 			$this->get_name_field('feature_source'),
 			'cherry',
 			$atts['feature_source'],
 			'Cherry Pick',
 			'',//Forms_PB::local_feed( $this->get_name_field(), $atts ),
 			'Select an individual post or page.'
-		);
+		);*/
 
 		$feature .= $this->accordion_radio(
 			$this->get_name_field('feature_source'),
@@ -195,12 +195,15 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Build your own feature.'
 		);
 
+		// If in fact limiting these to syndicated content, just use the form directly:
+		//$second_feature = 'Helpful text of some kind';
+		//$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_source', $atts );
+
 		$second_feature = $this->accordion_radio(
 			$this->get_name_field( 'second_source' ),
 			'remote_feed',
 			$atts['second_source'],
 			'Feed (Another Site)',
-			//Forms_PB::remote_feed( $this->get_name_field(), $atts ),
 			$this->syndicated_content( $this->get_name_field(), 'second_source', $atts ),
 			'Most recent posts from another site.'
 		);
@@ -210,7 +213,6 @@ class Item_County_Showcase_PB extends Item_PB {
 			'remote_feed',
 			$atts['third_source'],
 			'Feed (Another Site)',
-			//Forms_PB::remote_feed( $this->get_name_field(), $atts ),
 			$this->syndicated_content( $this->get_name_field(), 'third_source', $atts ),
 			'Most recent posts from another site.'
 		);
@@ -333,6 +335,8 @@ class Item_County_Showcase_PB extends Item_PB {
 	 * @param $settings  Shortcode attributes.
 	 *
 	 * @return string
+	 *
+	 * @todo Probably offer up a select field with a limited number of sites instead of a text input field for URL.
 	 */
 	public static function syndicated_content( $base_name, $prefix, $atts ) {
 
@@ -363,19 +367,19 @@ class Item_County_Showcase_PB extends Item_PB {
 	public function remote_query( $url, $post_type, $taxonomy, $term ) {
 
 		$request_url = esc_url( $url . 'wp-json/posts/' );
-		//$request_url = esc_url( $url . 'wp-json/wp/v2/' . esc_html( $post_type ) ); // What the API v2 url might look like.
+		//$request_url = esc_url( $url . 'wp-json/wp/v2/' . sanitize_key( $post_type ) ); // What the API v2 url might look like.
 
 		$request_url = add_query_arg( 'filter[posts_per_page]', 1, $request_url );
 
 		if ( $post_type ) {
-			$request_url = add_query_arg( 'type', esc_html( $post_type ), $request_url ); // Appropriate escaping here?
+			$request_url = add_query_arg( 'type', sanitize_key( $post_type ), $request_url );
 		}
 
 		if ( $taxonomy && $term ) {
 			$request_url = add_query_arg(
 				array(
-					'filter[taxonomy]' => esc_html( $taxonomy ),
-					'filter[term]' => esc_html( $term ),
+					'filter[taxonomy]' => sanitize_key( $taxonomy ),
+					'filter[term]' => sanitize_key( $term ),
 				),
 				$request_url
 			);
