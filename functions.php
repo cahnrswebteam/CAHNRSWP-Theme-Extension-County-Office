@@ -183,6 +183,8 @@ class WSU_Extension_County_Theme {
 		wp_nonce_field( 'cahnrswp_program_info', 'cahnrswp_program_info_nonce' );
 		$program_icons = array(
 			'4-H' => get_stylesheet_directory_uri() . '/program-icons/4-h.png',
+			'Agriculture' => get_stylesheet_directory_uri() . '/program-icons/ag.png',
+			'Gardening' => get_stylesheet_directory_uri() . '/program-icons/gardening.png',
 		);
 		$program_contact_name = get_post_meta( $post->ID, '_cahnrswp_program_specialist', true );
 		$program_contact_phone = get_post_meta( $post->ID, '_cahnrswp_program_phone', true );
