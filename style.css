@@ -95,6 +95,9 @@ body:not(.home) .cahnrs-header-group:after,
 }
 
 /* Contact info */
+.county-contact {
+	padding-bottom: 1em;
+}
 .county-contact p {
 	padding-bottom: 0;
 }
@@ -102,7 +105,7 @@ body:not(.home) .cahnrs-header-group:after,
 	font-weight: bold;
 	padding-bottom: 0.5rem;
 }
-.county-contact p:nth-last-child(2) {
+.county-contact p:last-child(2) {
 	padding-bottom: 0.5rem;
 }
 

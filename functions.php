@@ -404,6 +404,11 @@ class WSU_Extension_County_Theme {
 			'file_path' => __DIR__ . '/includes/shortcodes/contact-info.php',
 			'priority'  => 0,
 		);
+		$items['county_google_map'] = array(
+			'class'   => 'Item_County_Google_Map_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/google-map.php',
+			'priority'  => 0,
+		);
 		$items['county_site_search_form'] = array(
 			'class'   => 'Item_County_Site_Search_Form_PB',
 			'file_path' => __DIR__ . '/includes/shortcodes/search-form.php',
