@@ -44,7 +44,7 @@ class Item_County_Google_Map_PB extends Item_PB {
 			return '';
 		}
 
-		wp_enqueue_script( 'google_maps_api', '//maps.googleapis.com/maps/api/js?sensor=false', array(), false, true );
+		wp_enqueue_script( 'google_maps_api', '//maps.googleapis.com/maps/api/js', array(), false, true );
 		wp_enqueue_script( 'google-map-embed', get_stylesheet_directory_uri() . '/js/google-map-embed.js', array( 'google_maps_api' ), false, true );
 
 		$map_data = array( // check sanitizing
