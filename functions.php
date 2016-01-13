@@ -187,13 +187,13 @@ class WSU_Extension_County_Theme {
 	public function cahnrswp_county_program_info( $post ) {
 		wp_nonce_field( 'cahnrswp_program_info', 'cahnrswp_program_info_nonce' );
 		$program_icons = array(
-			'4-H' => get_stylesheet_directory_uri() . '/program-icons/four-h.png',
-			'Agriculture' => get_stylesheet_directory_uri() . '/program-icons/ag.png',
-			'Community &amp; Economic Development' => get_stylesheet_directory_uri() . '/program-icons/ced.png',
-			'Family &amp; Home' => get_stylesheet_directory_uri() . '/program-icons/family.png',
-			'Food &amp; Nutrition' => get_stylesheet_directory_uri() . '/program-icons/food.png',
-			'Gardening' => get_stylesheet_directory_uri() . '/program-icons/gardening.png',
-			'Natural Resources' => get_stylesheet_directory_uri() . '/program-icons/natural-resources.png',
+			'4-H' => 'four-h',
+			'Agriculture' => 'ag',
+			'Community &amp; Economic Development' => 'ced',
+			'Family &amp; Home' => 'family',
+			'Food &amp; Nutrition' => 'food',
+			'Gardening' => 'gardening',
+			'Natural Resources' => 'natural-resources',
 		);
 		$program_contact_name = get_post_meta( $post->ID, '_cahnrswp_program_specialist', true );
 		$program_contact_phone = get_post_meta( $post->ID, '_cahnrswp_program_phone', true );
@@ -221,6 +221,7 @@ class WSU_Extension_County_Theme {
 				<input type="text" name="_cahnrswp_program_email" id="cahnrswp-program-email" class="widefat" value="<?php echo $program_contact_email; ?>" />
 			</p>
 		</div>
+		<div id="cahnrswp-program-boilerplate"></div>
 		<?php
 	}
 

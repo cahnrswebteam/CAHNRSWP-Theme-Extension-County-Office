@@ -21,3 +21,12 @@
 	white-space: nowrap;
 	width: 68px;
 }
+#cahnrswp-program-boilerplate {
+	display: none;
+	margin-top: 1em;
+	padding: 11px 15px;
+}
+#cahnrswp-program-boilerplate.program-changed {
+	border-left: 4px solid #7ad03a;
+	display: block;	
+}

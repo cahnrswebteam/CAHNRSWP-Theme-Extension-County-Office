@@ -2,7 +2,7 @@
 	$program_contact_specialist = get_post_meta( get_the_ID(), '_cahnrswp_program_specialist', true );
 	$program_contact_phone = get_post_meta( get_the_ID(), '_cahnrswp_program_phone', true );
 	$program_contact_email = get_post_meta( get_the_ID(), '_cahnrswp_program_email', true );
-	$program_icon = get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true );
+	$program_icon = get_stylesheet_directory_uri() . '/program-icons/ ' . get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true ) . '.png';
 ?>
 
 <?php if ( ! is_front_page() ) : ?>
