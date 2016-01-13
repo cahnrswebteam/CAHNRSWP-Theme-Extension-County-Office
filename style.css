@@ -221,6 +221,16 @@ body:not(.home) .cahnrs-header-group:after,
 	padding-bottom: 56.25%;
 	position: relative;
 }
+.tribe-events-list-widget ol {
+	list-style: none;
+	padding: 0 0 1em 0;
+}
+.tribe-events-list-widget li h4 {
+	font-size: 1.12em;
+}
+.tribe-events-list-widget li .end-time {
+	display: block;
+}
 
 @media screen and (max-width:989px) {
 	.home .main-header:before {

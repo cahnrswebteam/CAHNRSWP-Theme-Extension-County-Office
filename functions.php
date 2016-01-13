@@ -74,6 +74,8 @@ class WSU_Extension_County_Theme {
 	/**
 	 * Dequeue Spine Bookmark stylesheet (only a precaution).
 	 * Enqueue styles and scripts for shortcodes.
+	 *
+	 * Maybe it would better to consolidate these into the theme's main stylesheet.
 	 */
 	public function additional_scripts() {
 		wp_dequeue_style( 'spine-theme-extra' );
@@ -88,6 +90,9 @@ class WSU_Extension_County_Theme {
 			}
 			if ( has_shortcode( $post->post_content, 'county_social_media_feed' ) ) {
 				wp_enqueue_script( 'facebook-page-plugin', '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5', array(), spine_get_script_version(), true );
+			}
+			if ( has_shortcode( $post->post_content, 'county_programs' ) ) {
+				wp_enqueue_style( 'cahnrswp-extension-county-programs', get_stylesheet_directory_uri() . '/css/programs.css' );
 			}
 		}
 	}
@@ -182,7 +187,7 @@ class WSU_Extension_County_Theme {
 	public function cahnrswp_county_program_info( $post ) {
 		wp_nonce_field( 'cahnrswp_program_info', 'cahnrswp_program_info_nonce' );
 		$program_icons = array(
-			'4-H' => get_stylesheet_directory_uri() . '/program-icons/4-h.png',
+			'4-H' => get_stylesheet_directory_uri() . '/program-icons/four-h.png',
 			'Agriculture' => get_stylesheet_directory_uri() . '/program-icons/ag.png',
 			'Gardening' => get_stylesheet_directory_uri() . '/program-icons/gardening.png',
 		);
@@ -191,7 +196,7 @@ class WSU_Extension_County_Theme {
 		$program_contact_email = get_post_meta( $post->ID, '_cahnrswp_program_email', true );
 		$program_icon = get_post_meta( $post->ID, '_cahnrswp_program_icon', true );
 		?>
-    <select name="_cahnrswp_program_icon" class="cahnrswp-program-icon">
+    <select id="county-program-icon" name="_cahnrswp_program_icon" class="cahnrswp-program-icon">
 			<option value="">(Icon)</option>
 			<?php foreach ( $program_icons as $name => $url ) : ?>
 			<option value="<?php echo $url; ?>" <?php selected( $program_icon, $url ); ?>><?php echo $name; ?></option>
@@ -409,6 +414,11 @@ class WSU_Extension_County_Theme {
 		$items['county_google_map'] = array(
 			'class'   => 'Item_County_Google_Map_PB',
 			'file_path' => __DIR__ . '/includes/shortcodes/google-map.php',
+			'priority'  => 0,
+		);
+		$items['county_programs'] = array(
+			'class'   => 'Item_County_Programs_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/programs.php',
 			'priority'  => 0,
 		);
 		$items['county_site_search_form'] = array(
