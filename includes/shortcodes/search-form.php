@@ -75,7 +75,8 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 	 */
 	public function form( $atts ) {
 
-		$html = Forms_PB::text_field( $this->get_name_field('label'), $atts['label'], 'Label' );
+		$html .= '<p>The Search Form object has no options at this time.</p>';
+		//$html .= Forms_PB::text_field( $this->get_name_field('label'), $atts['label'], 'Label' );
 
 		return $html;
 
@@ -92,7 +93,7 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 
 		$clean = array();
 
-		$clean['label'] = ( ! empty( $atts['label'] ) ) ? sanitize_text_field( $atts['label'] ) : '';
+		//$clean['label'] = ( ! empty( $atts['label'] ) ) ? sanitize_text_field( $atts['label'] ) : '';
 
 		return $clean;
 

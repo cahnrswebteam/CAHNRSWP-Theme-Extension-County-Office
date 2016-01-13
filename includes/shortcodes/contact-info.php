@@ -14,12 +14,12 @@ class Item_County_Contact_Info_PB extends Item_PB {
 	/**
 	 * @var string Description for displaying in Pagebuilder interface.
 	 */
-	public $desc = 'Contact information based on the fields from the Spine and hours of operation';
+	public $desc = 'Contact information and hours of operation';
 
 	/**
 	 * @var string Size of GUI for Pagebuilder.
 	 */
-	public $form_size = 'medium';
+	public $form_size = 'large';
 
 	/**
 	 * Display custom markup for contact info.
@@ -94,7 +94,8 @@ class Item_County_Contact_Info_PB extends Item_PB {
 	 */
 	public function form() {
 
-		$html = Forms_PB::wp_editor_field( $this->id, $this->content, false, 'cpb-field-one-column' );
+		$html = '<p>Information from the "Contact Information" fields from "Appearance" > "Customize" will be displayed.</p><p>Please input office hours below.</p>';
+		$html .= Forms_PB::wp_editor_field( $this->id, $this->content, false, 'cpb-field-one-column' );
 
 		return $html;
 

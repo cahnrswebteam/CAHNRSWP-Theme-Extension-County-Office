@@ -42,7 +42,9 @@ jQuery( document ).ready( function($) {
 			position : position
 		});
 
-		var marker_content = '<h3>'+map_data.title+'</h3><p>'+map_data.desc+'</p>';
+		var marker_content = '<h3>'+map_data.title+'</h3>'+
+		'<p>'+map_data.desc+'</p>'+
+		'<p><a href="https://www.google.com/maps?daddr=' + position + '" target="_blank">Directions &raquo;</a></p>';
 
 		var infowindow = new google.maps.InfoWindow({
 			content: marker_content

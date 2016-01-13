@@ -23,7 +23,7 @@ class Item_County_Showcase_PB extends Item_PB {
 
 	/**
 	 * Construct.
-	
+
 	public function __construct( $atts, $content ) {
 		parent::__construct( $atts, $content );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ), 21 );
@@ -31,7 +31,7 @@ class Item_County_Showcase_PB extends Item_PB {
 
 	/**
 	 * Enqueue scripts and styles for the landing page showcase.
-	
+
 	public function wp_enqueue_scripts() {
 		$post = get_post();
 		if ( is_singular() && is_front_page() && has_shortcode( $post->post_content, 'county_showcase' ) ) {
@@ -79,7 +79,7 @@ class Item_County_Showcase_PB extends Item_PB {
 
 			<?php if ( $atts['feature_source'] ) : ?>
 			<div class="featured">
-				<?php // maybe a slideshow... maybe not.
+				<?php
 					if ( 'feed' === $atts['feature_source'] ) {
 						$county_feature_query_args = array(
 							'posts_per_page' => 1,
@@ -120,7 +120,7 @@ class Item_County_Showcase_PB extends Item_PB {
 			<?php endif; ?>
 
 			<div class="syndicated">
-				
+
 				<?php
 					if ( $atts['second_source_url'] ) {
 						$this->remote_query( $atts['second_source_url'], $atts['second_source_post_type'], $atts['second_source_taxonomy'], $atts['second_source_terms'] );
@@ -177,15 +177,6 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Most recent post or page, optionally based on categories or tags.'
 		);
 
-		/*$feature .= $this->accordion_radio(
-			$this->get_name_field('feature_source'),
-			'cherry',
-			$atts['feature_source'],
-			'Cherry Pick',
-			'',//Forms_PB::local_feed( $this->get_name_field(), $atts ),
-			'Select an individual post or page.'
-		);*/
-
 		$feature .= $this->accordion_radio(
 			$this->get_name_field('feature_source'),
 			'manual',
@@ -195,32 +186,16 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Build your own feature.'
 		);
 
-		// If in fact limiting these to syndicated content, just use the form directly:
-		//$second_feature = 'Helpful text of some kind';
-		//$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_source', $atts );
+		$second_feature = '<p>Pull in content for the top right feature.</p>';
+		$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_source', $atts );
 
-		$second_feature = $this->accordion_radio(
-			$this->get_name_field( 'second_source' ),
-			'remote_feed',
-			$atts['second_source'],
-			'Feed (Another Site)',
-			$this->syndicated_content( $this->get_name_field(), 'second_source', $atts ),
-			'Most recent posts from another site.'
-		);
-
-		$third_feature = $this->accordion_radio(
-			$this->get_name_field( 'third_source' ),
-			'remote_feed',
-			$atts['third_source'],
-			'Feed (Another Site)',
-			$this->syndicated_content( $this->get_name_field(), 'third_source', $atts ),
-			'Most recent posts from another site.'
-		);
+		$third_feature = '<p>Pull in content for the bottom right feature.</p>';
+		$third_feature .= $this->syndicated_content( $this->get_name_field(), 'third_source', $atts );
 
 		$html = array(
 			'Main Feature'   => $feature,
-			'Second Feature' => $second_feature,
-			'Third Feature'  => $third_feature,
+			'Top Right Feature' => $second_feature,
+			'Bottom Right Feature'  => $third_feature,
 		);
 
 		return $html;
@@ -283,10 +258,6 @@ class Item_County_Showcase_PB extends Item_PB {
 			}
 		}
 
-		if ( ! empty( $atts['second_source'] ) ) {
-			$clean['second_source'] = sanitize_text_field( $atts['second_source'] );
-		}
-
 		if ( ! empty( $atts['second_source_url'] ) ) {
 			$clean['second_source_url'] = sanitize_text_field( $atts['second_source_url'] );
 		}
@@ -301,10 +272,6 @@ class Item_County_Showcase_PB extends Item_PB {
 
 		if ( ! empty( $atts['second_source_terms'] ) ) {
 			$clean['second_source_terms'] = sanitize_text_field( $atts['second_source_terms'] );
-		}
-
-		if ( ! empty( $atts['third_source'] ) ) {
-			$clean['third_source'] = sanitize_text_field( $atts['third_source'] );
 		}
 
 		if ( ! empty( $atts['third_source_url'] ) ) {
@@ -347,8 +314,6 @@ class Item_County_Showcase_PB extends Item_PB {
 		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'] , 'Feed By (slug)');
 
 		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_terms]', $atts[ $prefix . '_terms'] , 'Terms (Name)');
-
-		//$html .= Forms_PB::text_field( $base_name . '[' . $prefix . 'remote_posts_per_page]', $settings['remote_posts_per_page'] , 'Count' , 'cpb-small-field' );
 
 		return $html;
 
@@ -398,8 +363,6 @@ class Item_County_Showcase_PB extends Item_PB {
 				$image = $post->featured_image->attachment_meta->sizes->{'spine-medium_size'}->url; // API v2: to come...
 				$link = esc_html( $post->link );
 				$title = esc_html( $post->title ); // API v2: $post->title->rendered
-
-				
 
 				wsu_extension_county_feature_item( $image, $link, $title, '', true );
 
