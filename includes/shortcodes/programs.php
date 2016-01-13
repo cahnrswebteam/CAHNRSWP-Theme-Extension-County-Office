@@ -44,7 +44,7 @@ class Item_County_Programs_PB extends Item_PB {
 		<ul class="county-programs">
 		<?php
 			//foreach ( $atts['pages'] as $page ) {
-			foreach ( array( 5, 11, 7 ) as $program_page ) {
+			foreach ( array( 5, 11, 7, 268 ) as $program_page ) {
 				$program_icon = get_post_meta( $program_page, '_cahnrswp_program_icon', true );
 				$class = $program_icon ? basename( $program_icon, '.png' ) : '';
 				$href = get_the_permalink( $program_page );

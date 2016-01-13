@@ -71,7 +71,35 @@
 	color: #c69214;
 }
 .county-programs li.ag a:hover {
+	background-image: url(../program-icons/ag-white.png);
 	background-color: #c69214;
+}
+.county-programs li.ced a {
+	background-image: url(../program-icons/ced.png);
+	border-color: #b67233;
+	color: #b67233;
+}
+.county-programs li.ced a:hover {
+	background-image: url(../program-icons/ced-white.png);
+	background-color: #b67233;
+}
+.county-programs li.family a:hover {
+	background-image: url(../program-icons/family-white.png);
+	background-color: #4f868e;
+}
+.county-programs li.family a {
+	background-image: url(../program-icons/family.png);
+	border-color: #4f868e;
+	color: #4f868e;
+}
+.county-programs li.food a:hover {
+	background-image: url(../program-icons/food-white.png);
+	background-color: #c4922c;
+}
+.county-programs li.food a {
+	background-image: url(../program-icons/food.png);
+	border-color: #c4922c;
+	color: #c4922c;
 }
 .county-programs li.gardening a {
 	background-image: url(../program-icons/gardening.png);
@@ -79,7 +107,17 @@
 	color: #7a451d;
 }
 .county-programs li.gardening a:hover {
+	background-image: url(../program-icons/gardening-white.png);
 	background-color: #7a451d;
+}
+.county-programs li.natural-resources a {
+	background-image: url(../program-icons/natural-resources.png);
+	border-color: #8f7e34;
+	color: #8f7e34;
+}
+.county-programs li.natural-resources a:hover {
+	background-image: url(../program-icons/natural-resources-white.png);
+	background-color: #8f7e34;
 }
 
 @media only screen and (max-width:530px) {

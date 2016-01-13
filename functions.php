@@ -189,7 +189,11 @@ class WSU_Extension_County_Theme {
 		$program_icons = array(
 			'4-H' => get_stylesheet_directory_uri() . '/program-icons/four-h.png',
 			'Agriculture' => get_stylesheet_directory_uri() . '/program-icons/ag.png',
+			'Community &amp; Economic Development' => get_stylesheet_directory_uri() . '/program-icons/ced.png',
+			'Family &amp; Home' => get_stylesheet_directory_uri() . '/program-icons/family.png',
+			'Food &amp; Nutrition' => get_stylesheet_directory_uri() . '/program-icons/food.png',
 			'Gardening' => get_stylesheet_directory_uri() . '/program-icons/gardening.png',
+			'Natural Resources' => get_stylesheet_directory_uri() . '/program-icons/natural-resources.png',
 		);
 		$program_contact_name = get_post_meta( $post->ID, '_cahnrswp_program_specialist', true );
 		$program_contact_phone = get_post_meta( $post->ID, '_cahnrswp_program_phone', true );
