@@ -24,20 +24,22 @@ class County_Actions_Widget extends WP_Widget {
 	 * @todo All three actions in one widget, possibly provide a way to hide the object.
 	 */
 	public function widget( $args, $instance ) {
-		
-
-		if ( ! empty( $instance['first_action_url'] ) && ! empty( $instance['first_action_name'] ) ) :
-		?><div class="action-item"><a href="<?php echo esc_url( $instance['first_action_url'] ); ?>"><?php echo esc_html( $instance['first_action_name'] ); ?></a></div><?php
-    endif;
-
-		if ( ! empty( $instance['second_action_url'] ) && ! empty( $instance['second_action_name'] ) ) :
-		?><div class="action-item"><a href="<?php echo esc_url( $instance['second_action_url'] ); ?>"><?php echo esc_html( $instance['second_action_name'] ); ?></a></div><?php
-    endif;
-
-		if ( ! empty( $instance['third_action_url'] ) && ! empty( $instance['third_action_name'] ) ) :
-		?><div class="action-item"><a href="<?php echo esc_url( $instance['third_action_url'] ); ?>"><?php echo esc_html( $instance['third_action_name'] ); ?></a></div><?php
-    endif;
-
+		$class = is_front_page()? '' : ' class="secondary"' ; 
+		?>
+		<nav<?php echo $class; ?>>
+			<ul>
+				<?php if ( ! empty( $instance['first_action_url'] ) && ! empty( $instance['first_action_name'] ) ) :
+				?><li><a href="<?php echo esc_url( $instance['first_action_url'] ); ?>"><?php echo esc_html( $instance['first_action_name'] ); ?></a></li><?php
+				endif;
+				if ( ! empty( $instance['second_action_url'] ) && ! empty( $instance['second_action_name'] ) ) :
+				?><li><a href="<?php echo esc_url( $instance['second_action_url'] ); ?>"><?php echo esc_html( $instance['second_action_name'] ); ?></a></li><?php
+    		endif;
+				if ( ! empty( $instance['third_action_url'] ) && ! empty( $instance['third_action_name'] ) ) :
+				?><li><a href="<?php echo esc_url( $instance['third_action_url'] ); ?>"><?php echo esc_html( $instance['third_action_name'] ); ?></a></li><?php
+    		endif; ?>
+			</ul>
+		</nav>
+    <?php
 	}
 
 	/**
@@ -58,28 +60,22 @@ class County_Actions_Widget extends WP_Widget {
 		$third_action_name = ! empty( $instance['third_action_name'] ) ? $instance['third_action_name'] : '';
 		?>
 		<p>
+			<label for="<?php echo $this->get_field_id( 'first_action_name' ); ?>">First Action Name</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'first_action_name' ); ?>" name="<?php echo $this->get_field_name( 'first_action_name' ); ?>" type="text" value="<?php echo esc_attr( $first_action_name ); ?>" /><br />
 			<label for="<?php echo $this->get_field_id( 'first_action_url' ); ?>">First Action URL</label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'first_action_url' ); ?>" name="<?php echo $this->get_field_name( 'first_action_url' ); ?>" type="text" value="<?php echo esc_attr( $first_action_url ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'first_action_name' ); ?>">First Action Name</label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'first_action_name' ); ?>" name="<?php echo $this->get_field_name( 'first_action_name' ); ?>" type="text" value="<?php echo esc_attr( $first_action_name ); ?>" />
-		</p>
-		<p>
+			<label for="<?php echo $this->get_field_id( 'second_action_name' ); ?>">Second Action Name</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'second_action_name' ); ?>" name="<?php echo $this->get_field_name( 'second_action_name' ); ?>" type="text" value="<?php echo esc_attr( $second_action_name ); ?>" /><br />
 			<label for="<?php echo $this->get_field_id( 'second_action_url' ); ?>">Second Action URL</label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'second_action_url' ); ?>" name="<?php echo $this->get_field_name( 'second_action_url' ); ?>" type="text" value="<?php echo esc_attr( $second_action_url ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'second_action_name' ); ?>">Second Action Name</label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'second_action_name' ); ?>" name="<?php echo $this->get_field_name( 'second_action_name' ); ?>" type="text" value="<?php echo esc_attr( $second_action_name ); ?>" />
-		</p>
-		<p>
+			<label for="<?php echo $this->get_field_id( 'third_action_name' ); ?>">Third Action Name</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'third_action_name' ); ?>" name="<?php echo $this->get_field_name( 'third_action_name' ); ?>" type="text" value="<?php echo esc_attr( $third_action_name ); ?>" /><br />
 			<label for="<?php echo $this->get_field_id( 'third_action_url' ); ?>">Third Action URL</label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'third_action_url' ); ?>" name="<?php echo $this->get_field_name( 'third_action_url' ); ?>" type="text" value="<?php echo esc_attr( $third_action_url ); ?>" />
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'third_action_name' ); ?>">Third Action Name</label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'third_action_name' ); ?>" name="<?php echo $this->get_field_name( 'third_action_name' ); ?>" type="text" value="<?php echo esc_attr( $third_action_name ); ?>" />
 		</p>
 		<?php
 	}

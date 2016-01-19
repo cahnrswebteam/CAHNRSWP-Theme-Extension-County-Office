@@ -59,51 +59,66 @@ body:not(.home) .cahnrs-header-group:after,
 
 /* Actions widget (rough ideas) */
 .actions-footer {
-	box-sizing: border-box;
-	height: 128px;
 	overflow: hidden;
 	position: absolute;
-	right: 0;
-	top: 56px;
+	text-align: right;
+	top: 53px;
 	z-index: 99164;
 }
-.logged-in .actions-footer {
-	top: 90px;
+.max-990 .actions-footer {
+	width: 792px;
 }
-.home .actions-footer {
+.max-1188 .actions-footer {
+	width: 990px;
+}
+.home .actions-footer,
+.home .max-990 .actions-footer,
+.home .max-1188 .actions-footer {
+	height: 127px;
+	left: auto;
+	right: 0;
+	text-align: left;
 	top: 10px;
+	width: auto;
+}
+.logged-in .actions-footer {
+	top: 85px;
 }
 .home.logged-in .actions-footer {
 	top: 42px;
 }
-.actions-footer .action-item {
-	height: 33.33%;
-	position: relative;
+.actions-footer ul {
+	height: 100%;
+	list-style: none;
+	padding: 0;
 }
-.actions-footer .action-item a {
+.home .actions-footer li {
 	box-sizing: border-box;
+	height: 33.33%;
+	padding: 5px 0;
+}
+.actions-footer .secondary li {
+	display: inline-block;
+	padding: 0;
+}
+.actions-footer a {
 	background: #981e32;
+	box-sizing: border-box;
 	color: #fff;
+	height: 100%;
+	line-height: 1rem;
+	padding: 0.5rem 1rem; /* A little bit magic-number-y */
+	/*-webkit-align-items: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;*/
 	display: block;
-	padding: 0.3rem 1rem;
-	position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+	/*display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;*/
 }
-.actions-footer .action-item a:hover {
+.actions-footer a:hover {
 	background: #c60c30;
-}
-
-/* Contact info */
-.county-contact {
-	padding-bottom: 1em;
-}
-.county-contact p {
-	padding-bottom: 0;
-}
-.county-contact .unit-name {
-	font-weight: bold;
-	padding-bottom: 0.5rem;
 }
 
 /* Contact form */
@@ -207,6 +222,14 @@ body:not(.home) .cahnrs-header-group:after,
 	background: #5e6a71;
 }
 
+/* Search form stuff */
+input[type="search"]::-webkit-search-decoration {
+	display: none;
+}
+.cahnrs-search-field {
+	text-indent: 1rem;
+}
+
 /* Program icon */
 .extension-program-icon {
 	float: right;
@@ -215,8 +238,12 @@ body:not(.home) .cahnrs-header-group:after,
 /* Misc */
 .county-responsive-media {
 	height: 0;
+	margin-bottom: 2rem;
 	padding-bottom: 56.25%;
 	position: relative;
+}
+.tribe-events-list-widget {
+	padding-bottom: 1rem;
 }
 .tribe-events-list-widget ol {
 	list-style: none;
@@ -225,15 +252,50 @@ body:not(.home) .cahnrs-header-group:after,
 .tribe-events-list-widget li h4 {
 	font-size: 1.12em;
 }
-.tribe-events-list-widget li .end-time {
-	display: block;
-}
 
+
+@media screen and (min-width:792px) and (max-width:989px) {
+	.max-990 .actions-footer,
+	.max-1188 .actions-footer {
+		left: 0;
+		margin: 0 auto;
+		right: 0;
+		width: 100%;
+	}
+	.actions-footer .secondary {
+		margin-top: 50px;
+	}
+}
+@media screen and (min-width:792px) {
+	.actions-footer .secondary {
+		padding: 0.3rem 2rem 0.3rem 0;
+	}
+	.actions-footer .secondary li:nth-of-type(2) {
+		border-left: 1px solid #464e54;
+		border-right: 1px solid #464e54;
+		margin: 0 1rem;
+		padding: 0 1rem;
+	}
+	.actions-footer .secondary a {
+		background: none;
+		border: none;
+		color: #464e54;
+		padding: 0.2rem 0;
+	}
+	.actions-footer .secondary a:hover {
+		color: #c60c30;
+	}
+}
+@media screen and (max-width:1187px) {
+	.max-1188 .actions-footer {
+		width: 792px;
+	}
+}
 @media screen and (max-width:989px) {
 	.home .main-header:before {
 		margin-left: 0
 	}
-	.actions-footer {
+	.home .actions-footer {
 		margin-top: 50px;
 	}
 	.logged-in .actions-footer {
@@ -242,9 +304,11 @@ body:not(.home) .cahnrs-header-group:after,
 }
 @media screen and (max-width:791px) {
 	.actions-footer,
-	.logged-in .actions-footer,
+	.max-990 .actions-footer,
+	.max-1188 .actions-footer,
 	.home .actions-footer,
-	.home.logged-in .actions-footer {
+	.home .max-990 .actions-footer,
+	.home .max-1188 .actions-footer {
 		bottom: 0;
 		height: auto;
 		position: fixed;
@@ -256,19 +320,20 @@ body:not(.home) .cahnrs-header-group:after,
 	.home.logged-in .actions-footer {
 		bottom: 32px;
 	}
-	.actions-footer .action-item {
+	.actions-footer li,
+	.home .actions-footer li {
 		box-sizing: border-box;
 		float: left;
 		height: auto;
+		padding: 0;
 		width: 33.33%;
 	}
-	.actions-footer .action-item:nth-of-type(2) {
+	.actions-footer li:nth-of-type(2),
+	.home .actions-footer li:nth-of-type(2) {
 		padding: 0 1px;
 	}
-	.actions-footer .action-item a {
+	.actions-footer a {
 		text-align: center;
-		top: auto;
-		transform: none;
 	}
 }
 @media screen and (max-width:782px) {
@@ -283,5 +348,8 @@ body:not(.home) .cahnrs-header-group:after,
 	}
 	#binder {
 		padding-bottom: 3rem;
+	}
+	.actions-footer a {
+		font-size: 0.9em;
 	}
 }
