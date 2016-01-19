@@ -21,12 +21,15 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-.landing-page-showcase .syndicated .county-responsive-media {
+.max-990 .landing-page-showcase .syndicated .county-responsive-media {
 	padding-bottom: 55%;
 }
-.landing-page-showcase .syndicated .county-responsive-media:first-of-type {
-	margin-bottom: 2rem;
+.max-1188 .landing-page-showcase .syndicated .county-responsive-media {
+	padding-bottom: 55.4%;
 }
+/*.landing-page-showcase .syndicated .county-responsive-media:first-of-type {
+	margin-bottom: 2rem;
+}*/
 .landing-page-showcase .county-responsive-media a {
 	height: 100%;
 	position: absolute;
@@ -62,6 +65,14 @@
 	font-size: 1em;
 	font-weight: normal;
 }
+.landing-page-showcase .syndicated a:hover .article-title:after {
+	content: " \21AA";
+	font-family: Spine-Icons;
+	font-size: 0.9em;
+	position: relative;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+}
 .landing-page-showcase .article-summary p:last-of-type {
 	padding-bottom: 0;
 }
@@ -70,9 +81,6 @@
 	.landing-page-showcase .syndicated {
 		padding: 0;
 		width: 100%;
-	}
-	.landing-page-showcase .featured {
-		margin-bottom: 2rem;
 	}
 	.landing-page-showcase .featured .article-header {
 		bottom: 0;

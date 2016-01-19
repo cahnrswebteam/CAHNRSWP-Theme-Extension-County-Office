@@ -31,7 +31,9 @@
 .cycle-pager {
 	color: #d7dadb;
 	font-size: 3rem;
+	height: 3.5rem;
 	line-height: 1;
+	margin-top: -2rem;
 	text-align: center;
 }
 .cycle-pager span {
