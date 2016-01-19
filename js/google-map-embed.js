@@ -31,7 +31,8 @@ jQuery( document ).ready( function($) {
 	function initialize() {
 
 		var map = new google.maps.Map(document.getElementById( 'county-google-map' ), {
-			zoom : parseInt( map_data.zoom ),
+			//zoom : parseInt( map_data.zoom ),
+			zoom : 16,
 			center : position,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		});
@@ -42,9 +43,11 @@ jQuery( document ).ready( function($) {
 			position : position
 		});
 
-		var marker_content = '<h3>'+map_data.title+'</h3>'+
-		'<p>'+map_data.desc+'</p>'+
-		'<p><a href="https://www.google.com/maps?daddr=' + position + '" target="_blank">Directions &raquo;</a></p>';
+		var marker_content = '<div style="color: #333; font-size: 13px;">'+
+		'<div class="title" style="font-size: 14px; font-weight: bold;">'+map_data.title+'</div>'+
+		map_data.desc+
+		'<div><a href="https://www.google.com/maps?daddr=' + position + '" target="_blank">Directions &raquo;</a></div>'
+		'</div>';
 
 		var infowindow = new google.maps.InfoWindow({
 			content: marker_content
