@@ -35,7 +35,7 @@ class Item_County_Google_Map_PB extends Item_PB {
 			'coords'  => '',
 			'title'   => '',
 			'desc'    => '',
-			'zoom'    => 10
+			//'zoom'    => 10
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
@@ -50,8 +50,8 @@ class Item_County_Google_Map_PB extends Item_PB {
 		$map_data = array( // check sanitizing
 			'address' => esc_html( $atts['address'] ),
 			'title'   => esc_html( $atts['title'] ),
-			'desc'    => esc_html( $atts['desc'] ),
-			'zoom'    => esc_html( $atts['zoom'] ),
+			'desc'    => wpautop( wp_kses_post( $atts['desc'] ) ),
+			//'zoom'    => esc_html( $atts['zoom'] ),
 		);
 
 		if ( ! empty( $atts['coords'] ) ) {
@@ -62,7 +62,7 @@ class Item_County_Google_Map_PB extends Item_PB {
 
 		ob_start();
 		?>
-		<div style="padding-bottom: 100%; position:relative; width: 100%;"><div id="county-google-map" style="height: 100%; position: absolute; width: 100%;"></div></div>
+		<div style="margin-bottom: 2rem; padding-bottom: 100%; position:relative; width: 100%;"><div id="county-google-map" style="height: 100%; position: absolute; width: 100%;"></div></div>
 		<?php
 		$html = ob_get_contents();
 		ob_end_clean();
@@ -98,10 +98,12 @@ class Item_County_Google_Map_PB extends Item_PB {
 	 */
 	public function form( $atts ) {
 
-		$html = Forms_PB::text_field( $this->get_name_field('address'), $atts['address'], 'Address' ); // or lat and long
-		$html .= Forms_PB::text_field( $this->get_name_field('title'), $atts['title'], 'Marker info window title' );
-		$html .= Forms_PB::text_field( $this->get_name_field('desc'), $atts['desc'], 'Marker info window description' );
-		$html .= Forms_PB::select_field( $this->get_name_field('zoom'), $atts['zoom'], array_combine( range( 1, 21 ), range( 1, 21 ) ), 'Map zoom level<br />(1 = furthest, 21 = closest)' );
+		$html  = Forms_PB::text_field( $this->get_name_field('address'), $atts['address'], 'Address', 'cpb-field-one-column' );
+		// or lat and long
+		$html .= Forms_PB::text_field( $this->get_name_field('title'), $atts['title'], 'Marker Title' );
+		$html .= Forms_PB::text_field( $this->get_name_field('desc'), $atts['desc'], 'Marker Description' );
+		//$html .= Forms_PB::wp_editor_field( $this->id, $this->content, false, 'cpb-field-one-column' ); for description?
+		//$html .= Forms_PB::select_field( $this->get_name_field('zoom'), $atts['zoom'], array_combine( range( 1, 21 ), range( 1, 21 ) ), 'Map zoom level<br />(1 = furthest, 21 = closest)' );
 
 		return $html;
 
@@ -121,7 +123,7 @@ class Item_County_Google_Map_PB extends Item_PB {
 		$clean['address'] = ( ! empty( $atts['address'] ) ) ? sanitize_text_field( $atts['address'] ) : '';
 		$clean['title'] = ( ! empty( $atts['title'] ) ) ? sanitize_text_field( $atts['title'] ) : '';
 		$clean['desc'] = ( ! empty( $atts['desc'] ) ) ? sanitize_text_field( $atts['desc'] ) : '';
-		$clean['zoom'] = ( ! empty( $atts['zoom'] ) ) ? (int) sanitize_text_field( $atts['zoom'] ) : '';
+		//$clean['zoom'] = ( ! empty( $atts['zoom'] ) ) ? (int) sanitize_text_field( $atts['zoom'] ) : '';
 
 		return $clean;
 
