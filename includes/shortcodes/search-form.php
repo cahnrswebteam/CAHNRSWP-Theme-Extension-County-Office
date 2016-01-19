@@ -41,7 +41,9 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 		$html = ob_get_contents();
 		ob_end_clean();
 
-		return $html;
+		echo '<div class="county-mobile-search-form">' . $html . '</div>';
+
+		return '<div class="county-desktop-search-form">' . $html . '</div>';
 
 	}
 

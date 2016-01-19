@@ -114,7 +114,9 @@ class Item_County_Showcase_PB extends Item_PB {
 								}
 							}
 						}
-					}
+					}/* elseif ( 'remote_feed' === $atts['feature_source'] ) {
+						$this->remote_query( $atts['feature_source_url'], $atts['feature_source_post_type'], $atts['feature_source_taxonomy'], $atts['feature_source_terms'] );
+					}*/
 				?>
 			</div>
 			<?php endif; ?>
@@ -186,14 +188,14 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Build your own feature.'
 		);
 
-		$feature .= $this->accordion_radio(
+		/*$feature .= $this->accordion_radio(
 			$this->get_name_field('feature_source'),
 			'remote_feed' , 
 			$atts['feature_source'] , 
 			'Feed (Another Site)' , 
 			Forms_PB::remote_feed( $this->get_name_field() , $atts ),
 			'Content from another site.' 
-		);
+		);*/
 
 		$second_feature = '<p>Content for the top right feature.</p>';
 		$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_source', $atts );
