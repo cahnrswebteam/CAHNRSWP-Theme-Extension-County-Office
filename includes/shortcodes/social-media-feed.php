@@ -75,17 +75,13 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	 */
 	public function editor( $atts ) {
 
-		$defaults = array(
+		/*$defaults = array(
 			'source' => '',
 			'url'    => '',
 			'height' => '70'
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
-
-		if ( empty( $atts['source'] ) || empty( $atts['url'] ) ) {
-			return '';
-		}
 
 		$height = is_numeric( $atts['height'] ) ? esc_html( $atts['height'] ) : 70;
 
@@ -98,14 +94,16 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
         <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js?ver=0.22.3#xfbml=1&amp;version=v2.5"></script><!-- perhaps not the best idea -->
 				<?php endif; ?>
 
-				<?php /*if ( 'twitter' == $atts['source'] ) : ?>
+				<?php if ( 'twitter' == $atts['source'] ) : ?>
 				
-				<?php endif;*/ ?>
+				<?php endif; ?>
 
 			</div>
 		<?php
 		$html = ob_get_contents();
-		ob_end_clean();
+		ob_end_clean();*/
+
+		$html = ( $atts['source'] ) ? $atts['source'] : '<p>Add feed</p>';
 
 		return $html;
 
@@ -121,6 +119,7 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	public function form( $atts ) {
 
 		$social_media_sources = array(
+			''         => '(select)',
 			'facebook' => 'Facebook',
 			'twitter'  => 'Twitter',
 			// Other options?
@@ -131,6 +130,43 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 		$html .= Forms_PB::text_field( $this->get_name_field('url'), $atts['url'], 'URL' );
 		
 		$html .= Forms_PB::text_field( $this->get_name_field('height'), $atts['height'], 'Height (in pixels)' );
+
+		/*$html = $this->accordion_radio(
+			$this->get_name_field('source'),
+			'facebook',
+			$atts['source'],
+			'Facebook',
+			$this->feed_options( $this->get_name_field(), 'fb', $atts ),
+			'A feed from Facebook.'
+		);
+
+		$html .= $this->accordion_radio(
+			$this->get_name_field('source'),
+			'twitter',
+			$atts['source'],
+			'Twitter',
+			$this->feed_options( $this->get_name_field(), 'tw', $atts ),
+			'A feed from Twitter.'
+		);*/
+
+		return $html;
+
+	}
+
+	/**
+	 * Feed options.
+	 *
+	 * @param $base_name Field base.
+	 * @param $prefix    Attribute prefix.
+	 * @param $settings  Shortcode attributes.
+	 *
+	 * @return string
+	 */
+	public static function facebook_options( $base_name, $prefix, $atts ) {
+
+		$html = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'] , 'Site URL (Homepage)' , 'cpb-field-one-column' );
+
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_height]', $atts[ $prefix . '_height'] , 'Height (in pixels)');
 
 		return $html;
 

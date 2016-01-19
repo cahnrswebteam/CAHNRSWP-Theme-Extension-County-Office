@@ -168,7 +168,7 @@ class Item_County_Showcase_PB extends Item_PB {
 	 */
 	public function form( $atts ) {
 
-		$feature .= $this->accordion_radio(
+		$feature = $this->accordion_radio(
 			$this->get_name_field('feature_source'),
 			'feed',
 			$atts['feature_source'],
@@ -186,16 +186,25 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Build your own feature.'
 		);
 
-		$second_feature = '<p>Pull in content for the top right feature.</p>';
+		$feature .= $this->accordion_radio(
+			$this->get_name_field('feature_source'),
+			'remote_feed' , 
+			$atts['feature_source'] , 
+			'Feed (Another Site)' , 
+			Forms_PB::remote_feed( $this->get_name_field() , $atts ),
+			'Content from another site.' 
+		);
+
+		$second_feature = '<p>Content for the top right feature.</p>';
 		$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_source', $atts );
 
-		$third_feature = '<p>Pull in content for the bottom right feature.</p>';
+		$third_feature = '<p>Content for the bottom right feature.</p>';
 		$third_feature .= $this->syndicated_content( $this->get_name_field(), 'third_source', $atts );
 
 		$html = array(
-			'Main Feature'   => $feature,
-			'Top Right Feature' => $second_feature,
-			'Bottom Right Feature'  => $third_feature,
+			'Main'         => $feature,
+			'Top Right'    => $second_feature,
+			'Bottom Right' => $third_feature,
 		);
 
 		return $html;
