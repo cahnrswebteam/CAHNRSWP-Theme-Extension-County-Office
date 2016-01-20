@@ -11,13 +11,7 @@
 
 			<div id="page-<?php the_ID(); ?>" <?php post_class( 'builder-layout' ); ?>>
 
-				<?php if ( ! is_front_page() ) : ?>
-				<header class="article-header">
-					<h1 class="article-title"><?php the_title(); ?></h1>
-				</header>
-				<?php endif; ?>
-
-				<?php the_content(); ?>
+				<?php include( locate_template( 'articles/page-content.php' ) ); ?>
 
 			</div>
 
@@ -29,13 +23,7 @@
 
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-						<?php if ( ! is_front_page() ) : ?>
-						<header class="article-header">
-							<h1 class="article-title"><?php the_title(); ?></h1>
-						</header>
-						<?php endif; ?>
-
-						<?php the_content(); ?>
+						<?php include( locate_template( 'articles/page-content.php' ) ); ?>
 
 					</article>
 
