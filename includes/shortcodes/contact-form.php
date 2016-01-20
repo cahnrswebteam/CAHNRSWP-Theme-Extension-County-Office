@@ -60,7 +60,7 @@ class Item_County_Contact_Form_PB extends Item_PB {
 	 */
 	public function contact_form() {
 		?>
-		<form action="" method="post" class="county-contact-form <?php if ( isset( $_POST['submit'] ) ) { echo ' error'; } ?>">
+		<form action="#contact-form-<?php echo get_the_ID(); ?>"  id="contact-form-<?php echo get_the_ID(); ?>" method="post" class="county-contact-form <?php if ( isset( $_POST['submit'] ) ) { echo ' error'; } ?>">
 
 			<h2>Contact Us</h2>
 
@@ -111,9 +111,9 @@ class Item_County_Contact_Form_PB extends Item_PB {
 			// If email has been processed for sending, display a success message.
 			add_filter( 'wp_mail_content_type', array( $this, 'set_html_content_type' ) );
 			if ( wp_mail( $to, $subject, $message, $headers ) ) {
-				echo '<p><strong>' . $thanks_message . '</strong></p>';
+				echo '<p id="contact-form-' . get_the_ID() . '"><strong>' . $thanks_message . '</strong></p>';
 			} else {
-				echo '<p class="error">An unexpected error occurred.</p>'; // This could be more helpful
+				echo '<p id="contact-form-' . get_the_ID() . '" class="error">An unexpected error occurred.</p>'; // This could be more helpful
 			}
 			remove_filter( 'wp_mail_content_type', array( $this, 'set_html_content_type' ) );
 
