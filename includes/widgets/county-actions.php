@@ -20,11 +20,10 @@ class County_Actions_Widget extends WP_Widget {
 	 *
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
-	 *
-	 * @todo All three actions in one widget, possibly provide a way to hide the object.
 	 */
 	public function widget( $args, $instance ) {
-		$class = is_front_page()? '' : ' class="secondary"' ; 
+		wp_enqueue_style( 'cahnrswp-extension-county-actions', get_stylesheet_directory_uri() . '/css/site-actions.css' );
+		$class = is_front_page()? '' : ' class="secondary"' ;
 		?>
 		<nav<?php echo $class; ?>>
 			<ul>
@@ -48,8 +47,6 @@ class County_Actions_Widget extends WP_Widget {
 	 * @param array $instance The instance of the current widget form being displayed.
 	 *
 	 * @return void
-	 *
-	 * @todo All three actions in one widget.
 	 */
 	public function form( $instance ) {
 		$first_action_url = ! empty( $instance['first_action_url'] ) ? $instance['first_action_url'] : '';
