@@ -57,70 +57,6 @@ body:not(.home) .cahnrs-header-group:after,
 	height: 50px;
 }
 
-/* Actions widget (rough ideas) */
-.actions-footer {
-	overflow: hidden;
-	position: absolute;
-	text-align: right;
-	top: 53px;
-	z-index: 99164;
-}
-.max-990 .actions-footer {
-	width: 792px;
-}
-.max-1188 .actions-footer {
-	width: 990px;
-}
-.home .actions-footer,
-.home .max-990 .actions-footer,
-.home .max-1188 .actions-footer {
-	height: 127px;
-	left: auto;
-	right: 0;
-	text-align: left;
-	top: 10px;
-	width: auto;
-}
-.logged-in .actions-footer {
-	top: 85px;
-}
-.home.logged-in .actions-footer {
-	top: 42px;
-}
-.actions-footer ul {
-	height: 100%;
-	list-style: none;
-	padding: 0;
-}
-.home .actions-footer li {
-	box-sizing: border-box;
-	height: 33.33%;
-	padding: 5px 0;
-}
-.actions-footer .secondary li {
-	display: inline-block;
-	padding: 0;
-}
-.actions-footer a {
-	background: #981e32;
-	box-sizing: border-box;
-	color: #fff;
-	height: 100%;
-	line-height: 1rem;
-	padding: 0.5rem 1rem; /* A little bit magic-number-y */
-	/*-webkit-align-items: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;*/
-	display: block;
-	/*display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;*/
-}
-.actions-footer a:hover {
-	background: #c60c30;
-}
-
 /* Contact form */
 .county-contact-form {
 	margin: 0;
@@ -223,6 +159,9 @@ body:not(.home) .cahnrs-header-group:after,
 }
 
 /* Search form stuff */
+.county-mobile-search-form {
+	display: none;
+}
 input[type="search"]::-webkit-search-decoration {
 	display: none;
 }
@@ -253,93 +192,9 @@ input[type="search"]::-webkit-search-decoration {
 	font-size: 1.12em;
 }
 
-
-@media screen and (min-width:792px) and (max-width:989px) {
-	.max-990 .actions-footer,
-	.max-1188 .actions-footer {
-		left: 0;
-		margin: 0 auto;
-		right: 0;
-		width: 100%;
-	}
-	.actions-footer .secondary {
-		margin-top: 50px;
-	}
-}
-@media screen and (min-width:792px) {
-	.actions-footer .secondary {
-		padding: 0.3rem 2rem 0.3rem 0;
-	}
-	.actions-footer .secondary li:nth-of-type(2) {
-		border-left: 1px solid #464e54;
-		border-right: 1px solid #464e54;
-		margin: 0 1rem;
-		padding: 0 1rem;
-	}
-	.actions-footer .secondary a {
-		background: none;
-		border: none;
-		color: #464e54;
-		padding: 0.2rem 0;
-	}
-	.actions-footer .secondary a:hover {
-		color: #c60c30;
-	}
-}
-@media screen and (max-width:1187px) {
-	.max-1188 .actions-footer {
-		width: 792px;
-	}
-}
 @media screen and (max-width:989px) {
 	.home .main-header:before {
 		margin-left: 0
-	}
-	.home .actions-footer {
-		margin-top: 50px;
-	}
-	.logged-in .actions-footer {
-		margin-top: 18px;
-	}
-}
-@media screen and (max-width:791px) {
-	.actions-footer,
-	.max-990 .actions-footer,
-	.max-1188 .actions-footer,
-	.home .actions-footer,
-	.home .max-990 .actions-footer,
-	.home .max-1188 .actions-footer {
-		bottom: 0;
-		height: auto;
-		position: fixed;
-		right: auto;
-		top: auto;
-		width: 100%;
-	}
-	.logged-in .actions-footer,
-	.home.logged-in .actions-footer {
-		bottom: 32px;
-	}
-	.actions-footer li,
-	.home .actions-footer li {
-		box-sizing: border-box;
-		float: left;
-		height: auto;
-		padding: 0;
-		width: 33.33%;
-	}
-	.actions-footer li:nth-of-type(2),
-	.home .actions-footer li:nth-of-type(2) {
-		padding: 0 1px;
-	}
-	.actions-footer a {
-		text-align: center;
-	}
-}
-@media screen and (max-width:782px) {
-	.logged-in .actions-footer,
-	.home.logged-in .actions-footer {
-		bottom: 46px;
 	}
 }
 @media only screen and (max-width:693px) {
@@ -349,7 +204,11 @@ input[type="search"]::-webkit-search-decoration {
 	#binder {
 		padding-bottom: 3rem;
 	}
-	.actions-footer a {
-		font-size: 0.9em;
+	.county-mobile-search-form {
+		display: block;
+		padding: 2rem 2rem 0 2rem;
+	}
+	.county-desktop-search-form {
+		display: none;
 	}
 }
