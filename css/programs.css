@@ -81,23 +81,23 @@
 	background-image: url(../program-icons/ced-white.png);
 	background-color: #b67233;
 }
-.county-programs li.family a:hover {
-	background-image: url(../program-icons/family-white.png);
-	background-color: #4f868e;
-}
 .county-programs li.family a {
 	background-image: url(../program-icons/family.png);
 	border-color: #4f868e;
 	color: #4f868e;
 }
-.county-programs li.food a:hover {
-	background-image: url(../program-icons/food-white.png);
-	background-color: #c4922c;
+.county-programs li.family a:hover {
+	background-image: url(../program-icons/family-white.png);
+	background-color: #4f868e;
 }
 .county-programs li.food a {
 	background-image: url(../program-icons/food.png);
 	border-color: #c4922c;
 	color: #c4922c;
+}
+.county-programs li.food a:hover {
+	background-image: url(../program-icons/food-white.png);
+	background-color: #c4922c;
 }
 .county-programs li.gardening a {
 	background-image: url(../program-icons/gardening.png);

@@ -49,12 +49,12 @@ class County_Actions_Widget extends WP_Widget {
 	 * @return void
 	 */
 	public function form( $instance ) {
-		$first_action_url = ! empty( $instance['first_action_url'] ) ? $instance['first_action_url'] : '';
-		$first_action_name = ! empty( $instance['first_action_name'] ) ? $instance['first_action_name'] : '';
-		$second_action_url = ! empty( $instance['second_action_url'] ) ? $instance['second_action_url'] : '';
-		$second_action_name = ! empty( $instance['second_action_name'] ) ? $instance['second_action_name'] : '';
-		$third_action_url = ! empty( $instance['third_action_url'] ) ? $instance['third_action_url'] : '';
-		$third_action_name = ! empty( $instance['third_action_name'] ) ? $instance['third_action_name'] : '';
+		$first_action_url   = ( ! empty( $instance['first_action_url'] ) ) ? $instance['first_action_url'] : '';
+		$first_action_name  = ( ! empty( $instance['first_action_name'] ) ) ? $instance['first_action_name'] : '';
+		$second_action_url  = ( ! empty( $instance['second_action_url'] ) ) ? $instance['second_action_url'] : '';
+		$second_action_name = ( ! empty( $instance['second_action_name'] ) ) ? $instance['second_action_name'] : '';
+		$third_action_url   = ( ! empty( $instance['third_action_url'] ) ) ? $instance['third_action_url'] : '';
+		$third_action_name  = ( ! empty( $instance['third_action_name'] ) ) ? $instance['third_action_name'] : '';
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'first_action_name' ); ?>">First Action Name</label>
@@ -87,12 +87,12 @@ class County_Actions_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
-		$instance['first_action_url'] = ( ! empty( $new_instance['first_action_url'] ) ) ? sanitize_text_field( $new_instance['first_action_url'] ) : '';
-		$instance['first_action_name'] = ( ! empty( $new_instance['first_action_name'] ) ) ? sanitize_text_field( $new_instance['first_action_name'] ) : '';
-		$instance['second_action_url'] = ( ! empty( $new_instance['second_action_url'] ) ) ? sanitize_text_field( $new_instance['second_action_url'] ) : '';
+		$instance['first_action_url']   = ( ! empty( $new_instance['first_action_url'] ) ) ? sanitize_text_field( $new_instance['first_action_url'] ) : '';
+		$instance['first_action_name']  = ( ! empty( $new_instance['first_action_name'] ) ) ? sanitize_text_field( $new_instance['first_action_name'] ) : '';
+		$instance['second_action_url']  = ( ! empty( $new_instance['second_action_url'] ) ) ? sanitize_text_field( $new_instance['second_action_url'] ) : '';
 		$instance['second_action_name'] = ( ! empty( $new_instance['second_action_name'] ) ) ? sanitize_text_field( $new_instance['second_action_name'] ) : '';
-		$instance['third_action_url'] = ( ! empty( $new_instance['third_action_url'] ) ) ? sanitize_text_field( $new_instance['third_action_url'] ) : '';
-		$instance['third_action_name'] = ( ! empty( $new_instance['third_action_name'] ) ) ? sanitize_text_field( $new_instance['third_action_name'] ) : '';
+		$instance['third_action_url']   = ( ! empty( $new_instance['third_action_url'] ) ) ? sanitize_text_field( $new_instance['third_action_url'] ) : '';
+		$instance['third_action_name']  = ( ! empty( $new_instance['third_action_name'] ) ) ? sanitize_text_field( $new_instance['third_action_name'] ) : '';
 
 		return $instance;
 	}

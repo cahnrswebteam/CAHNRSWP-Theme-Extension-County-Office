@@ -24,23 +24,49 @@ class Item_County_Programs_PB extends Item_PB {
 	/**
 	 * Display markup.
 	 *
+	 * @param array $atts Shortcode attributes/field values.
+	 *
 	 * @return string
 	 */
 	public function item( $atts ) {
+		return $this->county_programs_display( $atts, 'public' );
+	}
+
+	/**
+	 * Editor markup.
+	 *
+	 * @param array $atts Shortcode attributes/field values.
+	 *
+	 * @return string
+	 */
+	public function editor( $atts ) {
+		return $this->county_programs_display( $atts, 'editor' );
+	}
+
+	/**
+	 * Output for display and editor views.
+	 *
+	 * @param array  $atts Shortcode attributes/field values.
+	 * @param string $view Front or back end.
+	 *
+	 * @return string
+	 */
+	public function county_programs_display( $atts, $view ) {
 
 		$defaults = array(
+			'title' => 'County Programs',
 			'pages' => '',
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
 
-		/*if ( empty( $atts['pages'] ) ) {
-			return '';
-		}*/
+		//if ( empty( $atts['pages'] ) ) {
+		//	return ( 'public' === $view ) ? '' : '<p>Click to select programs</p>';
+		//}
 
 		ob_start();
 		?>
-    <h3>County Programs</h3>
+    <h3 class="county-programs-title"><?php echo esc_html( $atts['title'] ); ?></h3>
 		<ul class="county-programs">
 		<?php
 			//foreach ( $atts['pages'] as $page ) {
@@ -65,27 +91,9 @@ class Item_County_Programs_PB extends Item_PB {
 	}
 
 	/**
-	 * Editor markup.
-	 *
-	 * @return string
-	 */
-	public function editor() {
-
-		ob_start();
-		?>
-		<p>Programs.</p>
-		<?php
-		$html = ob_get_contents();
-		ob_end_clean();
-
-		return $html;
-
-	}
-
-	/**
 	 * Pagebuilder GUI fields.
 	 *
-	 * @param $atts Shortcode attributes/field values.
+	 * @param array $atts Shortcode attributes/field values.
 	 *
 	 * @return string
 	 *
@@ -106,12 +114,13 @@ class Item_County_Programs_PB extends Item_PB {
 			$program_pages[ $page->ID ] = $page->post_title;
 		}
 
-		$html = Forms_PB::select_field( $this->get_name_field('pages'), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field('pages'), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field('pages'), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field('pages'), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field('pages'), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field('pages'), $atts['pages'], $program_pages, 'Page' );
+		$html  = Forms_PB::text_field( $this->get_name_field( 'title' ), $atts['title'], 'Title', 'cpb-field-one-column' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
 
 		return $html;
 
@@ -120,14 +129,14 @@ class Item_County_Programs_PB extends Item_PB {
 	/**
 	 * Sanitize input data.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return array
 	 */
 	public function clean( $atts ) {
 
 		$clean = array();
-
+		$clean['title'] = ( ! empty( $atts['title'] ) ) ? sanitize_text_field( $atts['title'] ) : 'County Programs';
 		$clean['pages'] = ( ! empty( $atts['pages'] ) ) ? sanitize_text_field( $atts['pages'] ) : '';
 
 		return $clean;

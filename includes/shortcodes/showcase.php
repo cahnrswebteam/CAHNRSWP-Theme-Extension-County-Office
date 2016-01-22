@@ -43,33 +43,35 @@ class Item_County_Showcase_PB extends Item_PB {
 	/**
 	 * Display markup.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
 	public function item( $atts ) {
 
 		$defaults = array(
-			'feature_source'          => '',
-			'feature_post_type'       => '',
-			'feature_taxonomy'        => '',
-			'feature_terms'           => '',
-			'items'                   => '',
-			'second_source'           => '',
-			'second_source_url'       => '',
-			'second_source_post_type' => '',
-			'second_source_taxonomy'  => '',
-			'second_source_terms'     => '',
-			'third_source'            => '',
-			'third_source_url'        => '',
-			'third_source_post_type'  => '',
-			'third_source_taxonomy'   => '',
-			'third_source_terms'      => '',
+			'feature_source'         => '',
+			'feature_post_type'      => '',
+			'feature_taxonomy'       => '',
+			'feature_terms'          => '',
+			'items'                  => '',
+			'feature_feed_url'       => '',
+			'feature_feed_post_type' => '',
+			'feature_feed_taxonomy'  => '',
+			'feature_feed_term'     => '',
+			'second_feed_url'        => '',
+			'second_feed_post_type'  => '',
+			'second_feed_taxonomy'   => '',
+			'second_feed_term'      => '',
+			'third_feed_url'         => '',
+			'third_feed_post_type'   => '',
+			'third_feed_taxonomy'    => '',
+			'third_feed_term'       => '',
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
 
-		if ( ! is_front_page() ) {
+		if ( ! is_front_page() && ( empty( $atts['feature_source'] ) || empty( $atts['second_feed_url'] ) || empty( $atts['third_feed_url'] ) ) ) {
 			return '';
 		}
 
@@ -108,15 +110,16 @@ class Item_County_Showcase_PB extends Item_PB {
 						$items = json_decode( $atts['items'], true );
 						if ( is_array( $items ) ) {
 							foreach ( $items as $item ) {
+								// Only show manuals slides that have an image.
 								if ( $item['img'] ) {
 									$excerpt = '<p>' . $item['excerpt'] . '</p>';
 									wsu_extension_county_feature_item( $item['img']['img_src'], $item['link'], $item['title'], $excerpt, false );
 								}
 							}
 						}
-					}/* elseif ( 'remote_feed' === $atts['feature_source'] ) {
-						$this->remote_query( $atts['feature_source_url'], $atts['feature_source_post_type'], $atts['feature_source_taxonomy'], $atts['feature_source_terms'] );
-					}*/
+					} elseif ( 'remote_feed' === $atts['feature_source'] ) {
+						$this->remote_query( $atts['feature_feed_url'], $atts['feature_feed_post_type'], $atts['feature_feed_taxonomy'], $atts['feature_feed_term'], true );
+					}
 				?>
 			</div>
 			<?php endif; ?>
@@ -124,14 +127,14 @@ class Item_County_Showcase_PB extends Item_PB {
 			<div class="syndicated">
 
 				<?php
-					if ( $atts['second_source_url'] ) {
-						$this->remote_query( $atts['second_source_url'], $atts['second_source_post_type'], $atts['second_source_taxonomy'], $atts['second_source_terms'] );
+					if ( $atts['second_feed_url'] ) {
+						$this->remote_query( $atts['second_feed_url'], $atts['second_feed_post_type'], $atts['second_feed_taxonomy'], $atts['second_feed_term'], false );
 					}
 				?>
 
 				<?php
-					if ( $atts['second_source_url'] ) {
-						$this->remote_query( $atts['third_source_url'], $atts['third_source_post_type'], $atts['third_source_taxonomy'], $atts['third_source_terms'] );
+					if ( $atts['second_feed_url'] ) {
+						$this->remote_query( $atts['third_feed_url'], $atts['third_feed_post_type'], $atts['third_feed_taxonomy'], $atts['third_feed_term'], false );
 					}
 				?>
 
@@ -147,15 +150,115 @@ class Item_County_Showcase_PB extends Item_PB {
 	}
 
 	/**
+	 * Retrieve syndicated content.
+	 *
+	 * @param string $url       Site from which to request the JSON.
+	 * @param string $post_type Type of content to retrieve.
+	 * @param string $taxonomy  Taxonomy to filter by.
+	 * @param string $term      Taxonomy term to filter by.
+	 * @param bool   $exerpt    Include the excerpt
+	 *
+	 * @return string
+	 */
+	public function remote_query( $url, $post_type, $taxonomy, $term, $excerpt ) {
+
+		$request_url = esc_url( $url . '/wp-json/posts/' );
+		//$request_url = esc_url( $url . 'wp-json/wp/v2/' . sanitize_key( $post_type ) ); // What the API v2 url might look like.
+
+		$request_url = add_query_arg( 'filter[posts_per_page]', 1, $request_url );
+
+		if ( $post_type ) {
+			$request_url = add_query_arg( 'type', sanitize_key( $post_type ), $request_url );
+		}
+
+		if ( $taxonomy && $term ) {
+			$request_url = add_query_arg(
+				array(
+					'filter[taxonomy]' => sanitize_key( $taxonomy ),
+					'filter[term]' => sanitize_key( $term ),
+				),
+				$request_url
+			);
+		}
+
+		$response = wp_remote_get( $request_url );
+
+		$data = wp_remote_retrieve_body( $response );
+
+		if ( ! empty( $data ) ) {
+
+			$posts = json_decode( $data );
+
+			foreach( $posts as $post ) {
+
+				$image = $post->featured_image->attachment_meta->sizes->{'spine-medium_size'}->url; // API v2: to come...
+				$link = esc_html( $post->link );
+				$title = esc_html( $post->title ); // API v2: $post->title->rendered
+				$excerpt = ( $excerpt ) ? $post->excerpt : '';
+
+				wsu_extension_county_feature_item( $image, $link, $title, $excerpt, true ); // Function at /includes/feature-item.php.
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Editor markup.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
 	public function editor( $atts ) {
 
-		$html = 'Showcase';
+		/* somehow flawed
+		if ( get_the_ID() != get_option( 'page_on_front' ) ) {
+			return '<p>The showcase will only display on the home page.</p>';
+		}*/
+
+		$defaults = array(
+			'feature_source'  => '',
+			'second_feed_url' => '',
+			'third_feed_url'  => '',
+		);
+
+		$atts = shortcode_atts( $defaults, $atts );
+		
+		if ( empty( $atts['feature_source'] ) || empty( $atts['second_feed_url'] ) || empty( $atts['third_feed_url'] ) ) {
+			return '<p>Click to configure features</p>';
+		}
+		// Just a placeholder for now.
+		ob_start();
+		?>
+		<section class="landing-page-showcase">
+			<div class="featured">
+				<article class="county-responsive-media" style="background-image:url(http://m1.wpdev.cahnrs.wsu.edu/county/wp-content/uploads/sites/21/2015/12/growing-groceries.jpg);">
+					<header class="article-header">
+						<h2 class="article-title">Growing Groceries</h2>
+					</header>
+					<div class="article-summary">
+						<p>Workshops February 12 - March 18, 2016</p>
+					</div>
+				</article>
+			</div>
+			<div class="syndicated">
+				<article class="county-responsive-media" style="background-image:url(http://cahnrs.wsu.edu/wp-content/uploads/2015/12/Davenport-Snow-Fence-crop-792x422.jpg);">
+					<header class="article-header">
+						<h2 class="article-title">Living snow fence thrives, surprises in Washington’s drylands</h2>
+					</header>
+				</article>
+				<article class="county-responsive-media" style="background-image:url(http://cahnrs.wsu.edu/wp-content/uploads/2016/01/PRD-in-grape-vines-792x445.jpeg);">
+					<header class="article-header">
+						<h2 class="article-title">Research helps growers conserve water, improve white wines</h2>
+					</header>
+				</article>
+			</div>
+		</section>
+		<?php
+		$html = ob_get_contents();
+		ob_end_clean();
 
 		return $html;
 
@@ -164,7 +267,7 @@ class Item_County_Showcase_PB extends Item_PB {
 	/**
 	 * Pagebuilder GUI fields.
 	 *
-	 * @param $atts Shortcode attributes/field values.
+	 * @param array $atts Shortcode attributes/field values.
 	 *
 	 * @return string
 	 */
@@ -188,20 +291,20 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Build your own feature.'
 		);
 
-		/*$feature .= $this->accordion_radio(
+		$feature .= $this->accordion_radio(
 			$this->get_name_field('feature_source'),
-			'remote_feed' , 
-			$atts['feature_source'] , 
-			'Feed (Another Site)' , 
-			Forms_PB::remote_feed( $this->get_name_field() , $atts ),
-			'Content from another site.' 
-		);*/
+			'remote_feed' ,
+			$atts['feature_source'] ,
+			'Feed (Another Site)' ,
+			$this->syndicated_content( $this->get_name_field(), 'feature_feed', $atts ),
+			'Content from another site.'
+		);
 
 		$second_feature = '<p>Content for the top right feature.</p>';
-		$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_source', $atts );
+		$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_feed', $atts );
 
 		$third_feature = '<p>Content for the bottom right feature.</p>';
-		$third_feature .= $this->syndicated_content( $this->get_name_field(), 'third_source', $atts );
+		$third_feature .= $this->syndicated_content( $this->get_name_field(), 'third_feed', $atts );
 
 		$html = array(
 			'Main'         => $feature,
@@ -214,9 +317,31 @@ class Item_County_Showcase_PB extends Item_PB {
 	}
 
 	/**
+	 * Syndicated features pagebuilder GUI.
+	 *
+	 * @param string $base_name Field base.
+	 * @param string $prefix    Attribute prefix.
+	 * @param array  $atts      Shortcode attributes.
+	 *
+	 * @return string
+	 *
+	 * @todo Probably offer up a select field with a limited number of sites instead of a text input field for URL.
+	 */
+	public static function syndicated_content( $base_name, $prefix, $atts ) {
+
+		$html  = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'] , 'Site URL (Homepage)' , 'cpb-field-one-column' );
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'] , 'Post Type (slug)');
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'] , 'Feed By (slug)');
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_term]', $atts[ $prefix . '_term'] , 'Term (Name)');
+
+		return $html;
+
+	}
+
+	/**
 	 * Sanitize input data.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return array
 	 */
@@ -269,117 +394,55 @@ class Item_County_Showcase_PB extends Item_PB {
 			}
 		}
 
-		if ( ! empty( $atts['second_source_url'] ) ) {
-			$clean['second_source_url'] = sanitize_text_field( $atts['second_source_url'] );
+		if ( ! empty( $atts['feature_feed_url'] ) ) {
+			$clean['feature_feed_url'] = sanitize_text_field( $atts['feature_feed_url'] );
 		}
 
-		if ( ! empty( $atts['second_source_post_type'] ) ) {
-			$clean['second_source_post_type'] = sanitize_text_field( $atts['second_source_post_type'] );
+		if ( ! empty( $atts['feature_feed_post_type'] ) ) {
+			$clean['feature_feed_post_type'] = sanitize_text_field( $atts['feature_feed_post_type'] );
 		}
 
-		if ( ! empty( $atts['second_source_taxonomy'] ) ) {
-			$clean['second_source_taxonomy'] = sanitize_text_field( $atts['second_source_taxonomy'] );
+		if ( ! empty( $atts['feature_feed_taxonomy'] ) ) {
+			$clean['feature_feed_taxonomy'] = sanitize_text_field( $atts['feature_feed_taxonomy'] );
 		}
 
-		if ( ! empty( $atts['second_source_terms'] ) ) {
-			$clean['second_source_terms'] = sanitize_text_field( $atts['second_source_terms'] );
+		if ( ! empty( $atts['feature_feed_term'] ) ) {
+			$clean['feature_feed_term'] = sanitize_text_field( $atts['feature_feed_term'] );
 		}
 
-		if ( ! empty( $atts['third_source_url'] ) ) {
-			$clean['third_source_url'] = sanitize_text_field( $atts['third_source_url'] );
+		if ( ! empty( $atts['second_feed_url'] ) ) {
+			$clean['second_feed_url'] = sanitize_text_field( $atts['second_feed_url'] );
 		}
 
-		if ( ! empty( $atts['third_source_post_type'] ) ) {
-			$clean['third_source_post_type'] = sanitize_text_field( $atts['third_source_post_type'] );
+		if ( ! empty( $atts['second_feed_post_type'] ) ) {
+			$clean['second_feed_post_type'] = sanitize_text_field( $atts['second_feed_post_type'] );
 		}
 
-		if ( ! empty( $atts['third_source_taxonomy'] ) ) {
-			$clean['third_source_taxonomy'] = sanitize_text_field( $atts['third_source_taxonomy'] );
+		if ( ! empty( $atts['second_feed_taxonomy'] ) ) {
+			$clean['second_feed_taxonomy'] = sanitize_text_field( $atts['second_feed_taxonomy'] );
 		}
 
-		if ( ! empty( $atts['third_source_terms'] ) ) {
-			$clean['third_source_terms'] = sanitize_text_field( $atts['third_source_terms'] );
+		if ( ! empty( $atts['second_feed_term'] ) ) {
+			$clean['second_feed_term'] = sanitize_text_field( $atts['second_feed_term'] );
+		}
+
+		if ( ! empty( $atts['third_feed_url'] ) ) {
+			$clean['third_feed_url'] = sanitize_text_field( $atts['third_feed_url'] );
+		}
+
+		if ( ! empty( $atts['third_feed_post_type'] ) ) {
+			$clean['third_feed_post_type'] = sanitize_text_field( $atts['third_feed_post_type'] );
+		}
+
+		if ( ! empty( $atts['third_feed_taxonomy'] ) ) {
+			$clean['third_feed_taxonomy'] = sanitize_text_field( $atts['third_feed_taxonomy'] );
+		}
+
+		if ( ! empty( $atts['third_feed_term'] ) ) {
+			$clean['third_feed_term'] = sanitize_text_field( $atts['third_feed_term'] );
 		}
 
 		return $clean;
-
-	}
-
-	/**
-	 * Remote Feed pagebuilder GUI.
-	 *
-	 * @param $base_name Field base.
-	 * @param $prefix    Attribute prefix.
-	 * @param $settings  Shortcode attributes.
-	 *
-	 * @return string
-	 *
-	 * @todo Probably offer up a select field with a limited number of sites instead of a text input field for URL.
-	 */
-	public static function syndicated_content( $base_name, $prefix, $atts ) {
-
-		$html = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'] , 'Site URL (Homepage)' , 'cpb-field-one-column' );
-
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'] , 'Post Type (slug)');
-
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'] , 'Feed By (slug)');
-
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_terms]', $atts[ $prefix . '_terms'] , 'Terms (Name)');
-
-		return $html;
-
-	}
-
-	/**
-	 * Retrieve syndicated content.
-	 *
-	 * @param string $url       Site from which to request the JSON.
-	 * @param string $post_type Type of content to retrieve.
-	 * @param string $taxonomy  Taxonomy to filter by.
-	 * @param string $term      Taxonomy term to filter by.
-	 *
-	 * @return string
-	 */
-	public function remote_query( $url, $post_type, $taxonomy, $term ) {
-
-		$request_url = esc_url( $url . 'wp-json/posts/' );
-		//$request_url = esc_url( $url . 'wp-json/wp/v2/' . sanitize_key( $post_type ) ); // What the API v2 url might look like.
-
-		$request_url = add_query_arg( 'filter[posts_per_page]', 1, $request_url );
-
-		if ( $post_type ) {
-			$request_url = add_query_arg( 'type', sanitize_key( $post_type ), $request_url );
-		}
-
-		if ( $taxonomy && $term ) {
-			$request_url = add_query_arg(
-				array(
-					'filter[taxonomy]' => sanitize_key( $taxonomy ),
-					'filter[term]' => sanitize_key( $term ),
-				),
-				$request_url
-			);
-		}
-
-		$response = wp_remote_get( $request_url );
-
-		$data = wp_remote_retrieve_body( $response );
-
-		if ( ! empty( $data ) ) {
-
-			$posts = json_decode( $data );
-
-			foreach( $posts as $post ) {
-
-				$image = $post->featured_image->attachment_meta->sizes->{'spine-medium_size'}->url; // API v2: to come...
-				$link = esc_html( $post->link );
-				$title = esc_html( $post->title ); // API v2: $post->title->rendered
-
-				wsu_extension_county_feature_item( $image, $link, $title, '', true );
-
-			}
-
-		}
 
 	}
 

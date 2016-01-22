@@ -24,37 +24,69 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	/**
 	 * Display markup.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
 	public function item( $atts ) {
+		return $this->county_social_media_feed_display( $atts, 'public' );
+	}
+
+	/**
+	 * Editor markup.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 *
+	 * @return string
+	 */
+	public function editor( $atts ) {
+		return $this->county_social_media_feed_display( $atts, 'editor' );
+	}
+
+	/**
+	 * Output for display and editor views.
+	 *
+	 * @param array  $atts Shortcode attributes/field values.
+	 * @param string $view Front or back end.
+	 *
+	 * @return string
+	 */
+	public function county_social_media_feed_display( $atts, $view ) {
 
 		$defaults = array(
-			'source' => '',
-			'url'    => '',
-			'height' => '70'
-			// Could add many attributes for different embed settings (e.g. facebook data-small-header)
+			'source'        => '',
+			'url'           => '',
+			'height'        => '600',
+			'small_header'  => 'false',
+			'hide_cover'    => 'false',
+			'facepile'      => 'true',
+			'user'          => '',
+			'theme'         => '',
+			'replies'       => '',
+			'expand_photos' => '',
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
 
-		if ( empty( $atts['source'] ) || empty( $atts['url'] ) ) {
-			return '';
+		if ( empty( $atts['source'] ) || ( empty( $atts['url'] )/* && empty( $atts['user'] )*/ ) ) {
+			return ( 'public' === $view ) ? '' : '<p>Click to configure feed</p>';
 		}
 
-		$height = is_numeric( $atts['height'] ) ? esc_html( $atts['height'] ) : 70;
+		$height = ( is_numeric( $atts['height'] ) ) ? esc_html( $atts['height'] ) : 600;
 
 		ob_start();
 		?>
 			<div class="county-responsive-media" style="padding-bottom:<?php echo $height; ?>px;">
 
 				<?php if ( 'facebook' == $atts['source'] ) : ?>
-        <div class="fb-page" data-href="<?php echo esc_url( $atts['url'] ); ?>" data-tabs="timeline" data-width="500" data-adapt-container-width="true" data-height="<?php echo $height; ?>" data-small-header="false" data-hide-cover="false" data-show-facepile="true"></div>
+        <div class="fb-page" data-href="<?php echo esc_url( $atts['url'] ); ?>" data-tabs="timeline" data-width="500" data-adapt-container-width="true" data-height="<?php echo $height; ?>" data-small-header="<?php echo esc_attr( $atts['small_header'] ); ?>" data-hide-cover="<?php echo esc_attr( $atts['hide_cover'] ); ?>" data-show-facepile="<?php echo esc_attr( $atts['facepile'] ); ?>"></div>
+        	<?php if ( 'editor' === $view ) : ?>
+        	<!--<script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js?ver=0.22.3#xfbml=1&amp;version=v2.5"></script>--><!-- probably a terrible idea -->
+          <?php endif; ?>
 				<?php endif; ?>
 
 				<?php /*if ( 'twitter' == $atts['source'] ) : ?>
-				
+
 				<?php endif;*/ ?>
 
 			</div>
@@ -67,76 +99,20 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	}
 
 	/**
-	 * Editor markup.
-	 *
-	 * @param $atts Shortcode attributes. 
-	 *
-	 * @return string
-	 */
-	public function editor( $atts ) {
-
-		/*$defaults = array(
-			'source' => '',
-			'url'    => '',
-			'height' => '70'
-		);
-
-		$atts = shortcode_atts( $defaults, $atts );
-
-		$height = is_numeric( $atts['height'] ) ? esc_html( $atts['height'] ) : 70;
-
-		ob_start();
-		?>
-			<div class="county-social-media-embed">
-
-				<?php if ( 'facebook' == $atts['source'] ) : ?>
-        <div class="fb-page" data-href="<?php echo esc_url( $atts['url'] ); ?>" data-tabs="timeline" data-width="500" data-adapt-container-width="true" data-height="<?php echo $height; ?>" data-small-header="false" data-hide-cover="false" data-show-facepile="true"></div>
-        <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js?ver=0.22.3#xfbml=1&amp;version=v2.5"></script><!-- perhaps not the best idea -->
-				<?php endif; ?>
-
-				<?php if ( 'twitter' == $atts['source'] ) : ?>
-				
-				<?php endif; ?>
-
-			</div>
-		<?php
-		$html = ob_get_contents();
-		ob_end_clean();*/
-
-		$html = ( $atts['source'] ) ? $atts['source'] : '<p>Add feed</p>';
-
-		return $html;
-
-	}
-
-	/**
 	 * Pagebuilder GUI fields.
 	 *
-	 * @param $atts Shortcode attributes/field values.
+	 * @param array $atts Shortcode attributes/field values.
 	 *
 	 * @return string
 	 */
 	public function form( $atts ) {
 
-		$social_media_sources = array(
-			''         => '(select)',
-			'facebook' => 'Facebook',
-			'twitter'  => 'Twitter',
-			// Other options?
-		);
-
-		$html = Forms_PB::select_field( $this->get_name_field('source'), $atts['source'], $social_media_sources, 'Channel' );
-
-		$html .= Forms_PB::text_field( $this->get_name_field('url'), $atts['url'], 'URL' );
-		
-		$html .= Forms_PB::text_field( $this->get_name_field('height'), $atts['height'], 'Height (in pixels)' );
-
-		/*$html = $this->accordion_radio(
+		$html = $this->accordion_radio(
 			$this->get_name_field('source'),
 			'facebook',
 			$atts['source'],
 			'Facebook',
-			$this->feed_options( $this->get_name_field(), 'fb', $atts ),
+			$this->facebook_options( $this->get_name_field(), $atts ),
 			'A feed from Facebook.'
 		);
 
@@ -145,28 +121,59 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 			'twitter',
 			$atts['source'],
 			'Twitter',
-			$this->feed_options( $this->get_name_field(), 'tw', $atts ),
+			$this->twitter_options( $this->get_name_field(), $atts ),
 			'A feed from Twitter.'
-		);*/
+		);
 
 		return $html;
 
 	}
 
 	/**
-	 * Feed options.
+	 * Facebook options.
 	 *
-	 * @param $base_name Field base.
-	 * @param $prefix    Attribute prefix.
-	 * @param $settings  Shortcode attributes.
+	 * @param string $base_name Field base.
+	 * @param string $prefix    Attribute prefix.
+	 * @param array $settings  Shortcode attributes.
 	 *
 	 * @return string
 	 */
-	public static function facebook_options( $base_name, $prefix, $atts ) {
+	public static function facebook_options( $base_name, $atts ) {
 
-		$html = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'] , 'Site URL (Homepage)' , 'cpb-field-one-column' );
+		$html  = Forms_PB::text_field( $base_name . '[url]', $atts['url'] , 'Facebook Page URL' , 'cpb-field-one-column' );
+		$html .= '<p style="font-size: 1.2rem; font-weight: bold; margin: 0 0 1rem;">Display Options</p>';
+		$html .= Forms_PB::text_field( $base_name . '[height]', $atts['height'] , 'Height');
+		$html .= Forms_PB::checkbox_field( $base_name . '[small_header]', 'true', $atts['small_header'], 'Small Header' );
+		$html .= Forms_PB::checkbox_field( $base_name . '[hide_cover]', 'true', $atts['hide_cover'], 'Hide Cover Image' );
+		$html .= Forms_PB::checkbox_field( $base_name . '[facepile]', 'false', $atts['facepile'], 'Hide Friends' );
 
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_height]', $atts[ $prefix . '_height'] , 'Height (in pixels)');
+		return $html;
+
+	}
+
+	/**
+	 * Twitter options.
+	 *
+	 * @param string $base_name Field base.
+	 * @param string $prefix    Attribute prefix.
+	 * @param array  $settings  Shortcode attributes.
+	 *
+	 * @return string
+	 */
+	public static function twitter_options( $base_name, $atts ) {
+
+		$twitter_themes = array(
+			''   => '(select)',
+			'1'  => 'Option 1',
+			'2'  => 'Option 2',
+		);
+
+		$html  = Forms_PB::text_field( $base_name . '[user]', $atts['user'] , 'Twitter Username' , 'cpb-field-one-column' );
+		$html .= '<p style="font-size: 1.2rem; font-weight: bold; margin: 0 0 1rem;">Display Options</p>';
+		$html .= Forms_PB::text_field( $base_name . '[height]', $atts['height'] , 'Height');
+		$html .= Forms_PB::select_field( $base_name . '[theme]', $atts['theme'], $twitter_themes, 'Theme' );
+		$html .= Forms_PB::checkbox_field( $base_name . '[replies]', 'true', $atts['replies'], "Show replies" );
+		$html .= Forms_PB::checkbox_field( $base_name . '[expand_photos]', 'false', $atts['expand_photos'], 'Auto expand photos' );
 
 		return $html;
 
@@ -175,7 +182,7 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	/**
 	 * Sanitize input data.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return array
 	 */
@@ -185,14 +192,25 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 
 		if ( ! empty( $atts['source'] ) ) {
 			$clean['source'] = sanitize_text_field( $atts['source'] );
-		}
-
-		if ( ! empty( $atts['url'] ) ) {
-			$clean['url'] = sanitize_text_field( $atts['url'] );
-		}
-
-		if ( ! empty( $atts['height'] ) ) {
-			$clean['height'] = sanitize_text_field( $atts['height'] );
+			// Facebook.
+			if ( 'facebook' === $atts['source'] ) {
+				if ( ! empty( $atts['url'] ) ) {
+					$clean['url'] = sanitize_text_field( $atts['url'] );
+				}
+				$clean['small_header'] = ( ! empty( $atts['small_header'] ) ) ? 'true' : '';
+				$clean['hide_cover']   = ( ! empty( $atts['hide_cover'] ) ) ? 'true' : '';
+				$clean['facepile']     = ( ! empty( $atts['facepile'] ) ) ? 'false' : '';
+			}
+			// Twitter
+			if ( 'twitter' === $atts['source'] ) {
+				if ( ! empty( $atts['user'] ) ) {
+					$clean['user'] = sanitize_text_field( $atts['user'] );
+				}
+				$clean['theme']         = ( ! empty( $atts['theme'] ) ) ? '' : ''; // find a default
+				$clean['replies']       = ( ! empty( $atts['replies'] ) ) ? 'true' : '';
+				$clean['expand_photos'] = ( ! empty( $atts['expand_photos'] ) ) ? 'false' : '';
+			}
+			$clean['height'] = ( ! empty( $atts['height'] ) && is_numeric( $atts['height'] ) ) ? (int) sanitize_text_field( $atts['height'] ) : '600';
 		}
 
 		return $clean;

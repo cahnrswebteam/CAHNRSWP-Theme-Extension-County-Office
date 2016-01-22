@@ -24,13 +24,14 @@ class Item_County_Contact_Form_PB extends Item_PB {
 	/**
 	 * Display markup.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
 	public function item( $atts ) {
 
 		$defaults = array(
+			'title'     => 'Contact Us',
 			'recipient' => '',
 			'subject'   => 'Contact form submission from the ' .  get_bloginfo('name') . ' website',
 			'thanks'    => "Thank you for your interest! We will respond to your message as soon as we're able.",
@@ -44,9 +45,9 @@ class Item_County_Contact_Form_PB extends Item_PB {
 
 		ob_start();
 		if ( $_POST['submit'] ) {
-			$this->process_form_submission( $atts['recipient'], $atts['subject'], $atts['thanks'] );
+			$this->process_form_submission( $atts['recipient'], $atts['subject'], $atts['thanks'], $atts['title'] );
 		} else {
-			$this->contact_form();
+			$this->contact_form( $atts['title'] );
 		}
 		$html = ob_get_contents();
 		ob_end_clean();
@@ -57,12 +58,14 @@ class Item_County_Contact_Form_PB extends Item_PB {
 
 	/**
 	 * Form markup.
+	 *
+	 * @param string $title Heading text.
 	 */
-	public function contact_form() {
+	public function contact_form( $title ) {
 		?>
 		<form action="#contact-form-<?php echo get_the_ID(); ?>"  id="contact-form-<?php echo get_the_ID(); ?>" method="post" class="county-contact-form <?php if ( isset( $_POST['submit'] ) ) { echo ' error'; } ?>">
 
-			<h2>Contact Us</h2>
+			<h2><?php echo esc_html( $title ); ?></h2>
 
 			<?php if ( isset( $_POST['submit'] ) ) : ?>
 			<p class="error">Sorry, it looks like you forgot some required fields.</p>
@@ -93,8 +96,13 @@ class Item_County_Contact_Form_PB extends Item_PB {
 
 	/**
 	 * If the submit button is clicked, send an email.
+	 *
+	 * @param string $recipient      Email address the submitted form is sent to.
+	 * @param string $subject        Subject of the email.
+	 * @param string $thanks_message Message to display in place of the form after successful submission.
+	 * @param string $title          Heading text.
 	 */
-	public function process_form_submission( $recipient, $subject, $thanks_message ) {
+	public function process_form_submission( $recipient, $subject, $thanks_message, $title ) {
 
 		if ( $_POST['contact-name'] && $_POST['contact-email'] && $_POST['contact-message'] ) :
 
@@ -119,7 +127,7 @@ class Item_County_Contact_Form_PB extends Item_PB {
 
 		else :
 
-			$this->contact_form();
+			$this->contact_form( $title );
 
 		endif;
 
@@ -135,16 +143,27 @@ class Item_County_Contact_Form_PB extends Item_PB {
 	/**
 	 * Editor markup
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
 	public function editor( $atts ) {
 
+		$defaults = array(
+			'title'     => 'Contact Us',
+			'recipient' => '',
+		);
+
+		$atts = shortcode_atts( $defaults, $atts );
+
+		if ( empty( $atts['recipient'] ) ) {
+			return '<p>Click to configure form</p>';
+		}
+
 		ob_start();
 		?>
 		<div class="county-contact-form">
-			<h2>Contact Us</h2>
+			<h2><?php echo esc_html( $atts['title'] ); ?></h2>
 			<div>Your name</div>
 			<div>Your email address</div>
 			<p>How can we help?</p>
@@ -162,17 +181,16 @@ class Item_County_Contact_Form_PB extends Item_PB {
 	/**
 	 * Pagebuilder GUI fields.
 	 *
-	 * @param $atts Shortcode attributes/field values.
+	 * @param array $atts Shortcode attributes/field values.
 	 *
 	 * @return string
 	 */
 	public function form( $atts ) {
 
-		$html = Forms_PB::text_field( $this->get_name_field( 'recipient' ), $atts['recipient'], 'Mail to' );
-
-		$html .= Forms_PB::text_field( $this->get_name_field( 'subject' ), $atts['subject'], 'Email subject' );
-
-		$html .= Forms_PB::text_field( $this->get_name_field( 'thanks' ), $atts['thanks'], 'Thanks message' );
+		$html  = Forms_PB::text_field( $this->get_name_field( 'title' ), $atts['title'], 'Title', 'cpb-field-one-column' );
+		$html .= Forms_PB::text_field( $this->get_name_field( 'recipient' ), $atts['recipient'], 'Email submissions to', 'cpb-field-one-column' );
+		$html .= Forms_PB::text_field( $this->get_name_field( 'subject' ), $atts['subject'], 'Email subject', 'cpb-field-one-column' );
+		$html .= Forms_PB::text_field( $this->get_name_field( 'thanks' ), $atts['thanks'], 'Thanks message', 'cpb-field-one-column' );
 
 		return $html;
 
@@ -181,24 +199,19 @@ class Item_County_Contact_Form_PB extends Item_PB {
 	/**
 	 * Sanitize input data.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return array
 	 */
 	public function clean( $atts ) {
 
 		$clean = array();
+		$clean['title']   = ( ! empty( $atts['title'] ) ) ? sanitize_text_field( $atts['title'] ) : 'Contact Us';
+		$clean['subject'] = ( ! empty( $atts['subject'] ) ) ? sanitize_text_field( $atts['subject'] ) : 'Contact form submission from the ' .  get_bloginfo('name') . ' website';
+		$clean['thanks']  = ( ! empty( $atts['thanks'] ) ) ? sanitize_text_field( $atts['thanks'] ) : "Thank you for your interest! We will respond to your message as soon as we're able.";
 
 		if ( ! empty( $atts['recipient'] ) ) {
 			$clean['recipient'] = sanitize_text_field( $atts['recipient'] );
-		}
-
-		if ( ! empty( $atts['subject'] ) ) {
-			$clean['subject'] = sanitize_text_field( $atts['subject'] );
-		}
-
-		if ( ! empty( $atts['thanks'] ) ) {
-			$clean['thanks'] = sanitize_text_field( $atts['thanks'] );
 		}
 
 		return $clean;

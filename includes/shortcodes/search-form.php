@@ -71,7 +71,7 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 	/**
 	 * Pagebuilder GUI fields.
 	 *
-	 * @param $atts Shortcode attributes/field values.
+	 * @param array $atts Shortcode attributes/field values.
 	 *
 	 * @return string
 	 */
@@ -87,7 +87,7 @@ class Item_County_Site_Search_Form_PB extends Item_PB {
 	/**
 	 * Sanitize input data.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return array
 	 */

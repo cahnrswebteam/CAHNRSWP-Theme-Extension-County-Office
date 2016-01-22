@@ -43,7 +43,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 	/**
 	 * Display markup.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
@@ -64,7 +64,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 			return '';
 		}
 
-		$count = is_numeric( $atts['posts_per_page'] ) ? esc_html( $atts['posts_per_page'] ) : 3;
+		$count = ( is_numeric( $atts['posts_per_page'] ) ) ? esc_html( $atts['posts_per_page'] ) : 3;
 
 		ob_start();
 		?>
@@ -127,13 +127,28 @@ class Item_County_Slideshow_PB extends Item_PB {
 	/**
 	 * Editor markup.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return string
 	 */
 	public function editor( $atts ) {
 
-		$html = 'Slideshow';
+		$defaults = array(
+			'source'         => '',
+			'post_type'      => '',
+			'taxonomy'       => '',
+			'terms'          => '',
+			'posts_per_page' => '3',
+			'items'          => '',
+		);
+
+		$atts = shortcode_atts( $defaults, $atts );
+
+		if ( empty( $atts['source'] ) ) {
+			return '<p>Click to configure slideshow</p>';
+		}
+
+		$html = '<p>Slideshow placeholder</p>';
 
 		return $html;
 
@@ -142,7 +157,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 	/**
 	 * Pagebuilder GUI fields.
 	 *
-	 * @param $atts Shortcode attributes/field values.
+	 * @param array $atts Shortcode attributes/field values.
 	 *
 	 * @return string
 	 */
@@ -182,7 +197,7 @@ class Item_County_Slideshow_PB extends Item_PB {
 	/**
 	 * Sanitize input data.
 	 *
-	 * @param $atts Shortcode attributes.
+	 * @param array $atts Shortcode attributes.
 	 *
 	 * @return array
 	 */
