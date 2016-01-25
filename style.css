@@ -33,6 +33,16 @@ Template: spine
 .home #extension-heading {
 	border-right: none;
 }
+
+/* Temporary until next CAHNRS Spine Tooling release */
+.page.has-featured-image .main-header {
+	z-index: auto;
+}
+.page.has-featured-image .main-header:before {
+	z-index: 1;
+}
+/* End temporary until next CAHNRS Spine Tooling release */
+
 .home .main-header,
 .home .main-header:before,
 .home .main-header:after,
