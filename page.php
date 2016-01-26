@@ -3,7 +3,7 @@
 	<main class="spine-blank-template">
 
 		<?php get_template_part( 'parts/headers' ); ?>
-		<?php get_template_part( 'parts/featured-images' ); ?>
+		<?php if ( ! is_front_page() ) { get_template_part( 'parts/featured-images' ); } ?>
 
 		<?php if ( have_posts() ) : while( have_posts() ) : the_post(); ?>
 
