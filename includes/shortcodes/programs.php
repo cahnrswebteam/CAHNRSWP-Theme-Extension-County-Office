@@ -60,17 +60,23 @@ class Item_County_Programs_PB extends Item_PB {
 
 		$atts = shortcode_atts( $defaults, $atts );
 
-		//if ( empty( $atts['pages'] ) ) {
-		//	return ( 'public' === $view ) ? '' : '<p>Click to select programs</p>';
-		//}
+		if ( empty( $atts['pages'] ) ) {
+			return ( 'public' === $view ) ? '' : '<p>Click to select programs</p>';
+		}
+
+		if ( ! is_array( $atts['pages'] ) ) {
+			$atts['pages'] = explode( ',', $atts['pages'] );
+		}
 
 		ob_start();
 		?>
     <h3 class="county-programs-title"><?php echo esc_html( $atts['title'] ); ?></h3>
 		<ul class="county-programs">
 		<?php
-			//foreach ( $atts['pages'] as $page ) {
-			foreach ( array( 5, 11, 7, 268 ) as $program_page ) {
+			foreach ( $atts['pages'] as $program_page ) {
+				if ( empty( $program_page ) ) {
+					continue;
+				}
 				$class = get_post_meta( $program_page, '_cahnrswp_program_icon', true );
 				$href = get_the_permalink( $program_page );
 				$title = get_the_title( $program_page );
@@ -111,16 +117,30 @@ class Item_County_Programs_PB extends Item_PB {
 		) );
 
 		foreach ( $get_program_pages as $page ) {
+			
 			$program_pages[ $page->ID ] = $page->post_title;
 		}
 
+		if ( ! is_array( $atts['pages'] ) ) {
+			$atts['pages'] = explode( ',', $atts['pages'] );
+		}
+
 		$html  = Forms_PB::text_field( $this->get_name_field( 'title' ), $atts['title'], 'Title', 'cpb-field-one-column' );
-		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
-		$html .= Forms_PB::select_field( $this->get_name_field( 'pages' ), $atts['pages'], $program_pages, 'Page' );
+		$html .= '<div class="county-program-pages">';
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages][0' ), $atts['pages'][0], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages][1' ), $atts['pages'][1], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages][2' ), $atts['pages'][2], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages][3' ), $atts['pages'][3], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages][4' ), $atts['pages'][4], $program_pages, 'Page' );
+		$html .= Forms_PB::select_field( $this->get_name_field( 'pages][5' ), $atts['pages'][5], $program_pages, 'Page' );
+		$html .= '</div>';
+		/*$html .= '<script>
+		jQuery(document).ready(function($) {
+			$(".county-program-pages select").live("change", function() {
+				$(this).parent().siblings().find("option[value=" + $(this).val() + "]").remove();
+			});
+		});
+		</script>';*/
 
 		return $html;
 
@@ -134,6 +154,10 @@ class Item_County_Programs_PB extends Item_PB {
 	 * @return array
 	 */
 	public function clean( $atts ) {
+
+		if ( is_array( $atts['pages'] ) ) {
+			$atts['pages'] = implode( ',', $atts['pages'] );
+		}
 
 		$clean = array();
 		$clean['title'] = ( ! empty( $atts['title'] ) ) ? sanitize_text_field( $atts['title'] ) : 'County Programs';
