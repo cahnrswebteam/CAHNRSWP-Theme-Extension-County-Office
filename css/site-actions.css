@@ -114,11 +114,11 @@
 		top: 60px;
 	}
 	@media screen and (max-height:999px) {
-	.page.has-featured-image .actions-footer,
-	.page.has-featured-image.logged-in .actions-footer {
-		top: 400px;
+		.page.has-featured-image .actions-footer,
+		.page.has-featured-image.logged-in .actions-footer {
+			top: 400px;
+		}
 	}
-}
 }
 @media screen and (max-width:791px) {
 	.actions-footer,
