@@ -1,19 +1,26 @@
-<?php // Get program meta from this page or its parent if there is any.
+<?php
+// Get program meta from this page or its parents if there is any.
 $page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
-$parent_pages  = get_post_ancestors( get_the_ID() );
 if ( 'templates/program.php' === $page_template ) {
 	$program_contact_specialist = get_post_meta( get_the_ID(), '_cahnrswp_program_specialist', true );
 	$program_contact_phone = get_post_meta( get_the_ID(), '_cahnrswp_program_phone', true );
 	$program_contact_email = get_post_meta( get_the_ID(), '_cahnrswp_program_email', true );
 	$program_icon = get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true ) . '.png';
-} else if ( $parent_pages && 'templates/program.php' !== $page_template ) {
-	$parent = $parent_pages[count( $parent_pages )-1];
-	$parent_page_template = get_post_meta( $parent, '_wp_page_template', true );
-	if ( 'templates/program.php' === $parent_page_template ) {
-		$program_contact_specialist = get_post_meta( $parent, '_cahnrswp_program_specialist', true );
-		$program_contact_phone = get_post_meta( $parent, '_cahnrswp_program_phone', true );
-		$program_contact_email = get_post_meta( $parent, '_cahnrswp_program_email', true );
-		$program_icon = get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( $parent, '_cahnrswp_program_icon', true ) . '.png';
+} else {
+	$parent_pages  = get_post_ancestors( get_the_ID() );
+	if ( $parent_pages ) {
+		foreach ( $parent_pages as $parent_page ) {
+			$parent_page_template = get_post_meta( $parent_page, '_wp_page_template', true );
+			if ( 'templates/program.php' !== $parent_page_template ) {
+				continue;
+			} else {
+				$program_contact_specialist = get_post_meta( $parent_page, '_cahnrswp_program_specialist', true );
+				$program_contact_phone = get_post_meta( $parent_page, '_cahnrswp_program_phone', true );
+				$program_contact_email = get_post_meta( $parent_page, '_cahnrswp_program_email', true );
+				$program_icon = get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( $parent_page, '_cahnrswp_program_icon', true ) . '.png';
+				break;
+			}
+		}
 	}
 }
 ?>
