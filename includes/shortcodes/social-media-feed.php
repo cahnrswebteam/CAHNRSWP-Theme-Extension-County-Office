@@ -61,15 +61,16 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 			'hide_cover'    => 'false',
 			'facepile'      => 'true',
 			'user'          => '',
+			'widget_id'     => '',
 			't_height'      => '600',
-			'theme'         => '',
+			/*'theme'         => '',
 			'replies'       => '',
-			'expand_photos' => '',
+			'expand_photos' => '',*/
 		);
 
 		$atts = shortcode_atts( $defaults, $atts );
 
-		if ( empty( $atts['source'] ) || ( empty( $atts['url'] )/* && empty( $atts['user'] )*/ ) ) {
+		if ( empty( $atts['source'] ) || ( empty( $atts['url'] ) && empty( $atts['user'] ) ) ) {
 			return ( 'public' === $view ) ? '' : '<p>Click to configure feed</p>';
 		}
 
@@ -81,15 +82,16 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 			<div class="county-responsive-media" style="padding-bottom:<?php echo $fb_height; ?>px;">
 
 				<?php if ( 'facebook' == $atts['source'] ) : ?>
-        <div class="fb-page" data-href="<?php echo esc_url( $atts['url'] ); ?>" data-tabs="timeline" data-width="500" data-adapt-container-width="true" data-height="<?php echo $fb_height; ?>" data-small-header="<?php echo esc_attr( $atts['small_header'] ); ?>" data-hide-cover="<?php echo esc_attr( $atts['hide_cover'] ); ?>" data-show-facepile="<?php echo esc_attr( $atts['facepile'] ); ?>"></div>
+        	<div class="fb-page" data-href="<?php echo esc_url( $atts['url'] ); ?>" data-tabs="timeline" data-width="500" data-adapt-container-width="true" data-height="<?php echo $fb_height; ?>" data-small-header="<?php echo esc_attr( $atts['small_header'] ); ?>" data-hide-cover="<?php echo esc_attr( $atts['hide_cover'] ); ?>" data-show-facepile="<?php echo esc_attr( $atts['facepile'] ); ?>"></div>
         	<?php if ( 'editor' === $view ) : ?>
         	<!--<script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js?ver=0.22.3#xfbml=1&amp;version=v2.5"></script>--><!-- probably a terrible idea -->
           <?php endif; ?>
 				<?php endif; ?>
 
-				<?php /*if ( 'twitter' == $atts['source'] ) : ?>
-
-				<?php endif;*/ ?>
+				<?php if ( 'twitter' == $atts['source'] && 'public' === $view  ) : ?>
+					<a class="twitter-timeline" href="https://twitter.com/<?php echo esc_attr( $atts['user'] ); ?>" data-widget-id="694271618579714048">Tweets by @<?php echo esc_html( $atts['user'] ); ?></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+				<?php endif; ?>
 
 			</div>
 		<?php
@@ -142,9 +144,9 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	 */
 	public static function facebook_options( $base_name, $atts ) {
 
-		$html  = Forms_PB::text_field( $base_name . '[url]', $atts['url'] , 'Facebook Page URL' , 'cpb-field-one-column' );
+		$html  = Forms_PB::text_field( $base_name . '[url]', $atts['url'], 'Facebook Page URL', 'cpb-field-one-column' );
 		$html .= '<p style="font-size: 1.2rem; font-weight: bold; margin: 0 0 1rem;">Display Options</p>';
-		$html .= Forms_PB::text_field( $base_name . '[fb_height]', $atts['fb_height'] , 'Height (in pixels)');
+		$html .= Forms_PB::text_field( $base_name . '[fb_height]', $atts['fb_height'], 'Height (in pixels)');
 		$html .= Forms_PB::checkbox_field( $base_name . '[small_header]', 'true', $atts['small_header'], 'Small Header' );
 		$html .= Forms_PB::checkbox_field( $base_name . '[hide_cover]', 'true', $atts['hide_cover'], 'Hide Cover Image' );
 		$html .= Forms_PB::checkbox_field( $base_name . '[facepile]', 'false', $atts['facepile'], 'Hide Friends' );
@@ -164,18 +166,20 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 	 */
 	public static function twitter_options( $base_name, $atts ) {
 
-		$twitter_themes = array(
+		/*$twitter_themes = array(
 			''   => '(select)',
 			'1'  => 'Option 1',
 			'2'  => 'Option 2',
-		);
+		);*/
 
-		$html  = Forms_PB::text_field( $base_name . '[user]', $atts['user'] , 'Twitter Username' , 'cpb-field-one-column' );
+		$html  = 'Please visit <a href="https://twitter.com/settings/widgets/new/user">https://twitter.com/settings/widgets/new/user</a> to create your timeline widget. Return here with the value of the "data-widget-id" attribute provided in the widget code.';
+		$html .= Forms_PB::text_field( $base_name . '[user]', $atts['user'], 'Twitter Username', 'cpb-field-one-column' );
+		$html .= Forms_PB::text_field( $base_name . '[widget_id]', $atts['widget_id'], 'Widget ID', 'cpb-field-one-column' );
 		$html .= '<p style="font-size: 1.2rem; font-weight: bold; margin: 0 0 1rem;">Display Options</p>';
-		$html .= Forms_PB::text_field( $base_name . '[t_height]', $atts['t_height'] , 'Height (in pixels)');
-		$html .= Forms_PB::select_field( $base_name . '[theme]', $atts['theme'], $twitter_themes, 'Theme' );
+		$html .= Forms_PB::text_field( $base_name . '[t_height]', $atts['t_height'], 'Height (in pixels)');
+		/*$html .= Forms_PB::select_field( $base_name . '[theme]', $atts['theme'], $twitter_themes, 'Theme' );
 		$html .= Forms_PB::checkbox_field( $base_name . '[replies]', 'true', $atts['replies'], "Show replies" );
-		$html .= Forms_PB::checkbox_field( $base_name . '[expand_photos]', 'false', $atts['expand_photos'], 'Auto expand photos' );
+		$html .= Forms_PB::checkbox_field( $base_name . '[expand_photos]', 'false', $atts['expand_photos'], 'Auto expand photos' );*/
 
 		return $html;
 
@@ -209,10 +213,13 @@ class Item_County_Social_Media_Feed_PB extends Item_PB {
 				if ( ! empty( $atts['user'] ) ) {
 					$clean['user'] = sanitize_text_field( $atts['user'] );
 				}
+				if ( ! empty( $atts['widget_id'] ) ) {
+					$clean['widget_id'] = sanitize_text_field( $atts['widget_id'] );
+				}
 				$clean['t_height'] = ( ! empty( $atts['t_height'] ) && is_numeric( $atts['t_height'] ) ) ? (int) sanitize_text_field( $atts['t_height'] ) : '600';
-				$clean['theme']         = ( ! empty( $atts['theme'] ) ) ? '' : ''; // find a default
+				/*$clean['theme']         = ( ! empty( $atts['theme'] ) ) ? '' : ''; // find a default
 				$clean['replies']       = ( ! empty( $atts['replies'] ) ) ? 'true' : '';
-				$clean['expand_photos'] = ( ! empty( $atts['expand_photos'] ) ) ? 'false' : '';
+				$clean['expand_photos'] = ( ! empty( $atts['expand_photos'] ) ) ? 'false' : '';*/
 			}
 			
 		}

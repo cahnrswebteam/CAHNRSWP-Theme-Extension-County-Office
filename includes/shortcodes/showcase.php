@@ -293,9 +293,9 @@ class Item_County_Showcase_PB extends Item_PB {
 
 		$feature .= $this->accordion_radio(
 			$this->get_name_field('feature_source'),
-			'remote_feed' ,
-			$atts['feature_source'] ,
-			'Feed (Another Site)' ,
+			'remote_feed',
+			$atts['feature_source'],
+			'Feed (Another Site)',
 			$this->syndicated_content( $this->get_name_field(), 'feature_feed', $atts ),
 			'Content from another site.'
 		);
@@ -329,10 +329,10 @@ class Item_County_Showcase_PB extends Item_PB {
 	 */
 	public static function syndicated_content( $base_name, $prefix, $atts ) {
 
-		$html  = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'] , 'Site URL (Homepage)' , 'cpb-field-one-column' );
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'] , 'Post Type (slug)');
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'] , 'Feed By (slug)');
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_term]', $atts[ $prefix . '_term'] , 'Term (Name)');
+		$html  = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'], 'Site URL (Homepage)', 'cpb-field-one-column' );
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'], 'Post Type (slug)');
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'], 'Feed By (slug)');
+		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_term]', $atts[ $prefix . '_term'], 'Term (Name)');
 
 		return $html;
 
