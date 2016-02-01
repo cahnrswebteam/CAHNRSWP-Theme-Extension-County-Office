@@ -41,9 +41,14 @@ class Item_County_Contact_Info_PB extends Item_PB {
 
 		$atts = shortcode_atts( $defaults, $atts );
 
-		$address  = esc_html( spine_get_option( 'contact_streetAddress' ) );
-		$locality = esc_html( spine_get_option( 'contact_addressLocality' ) );
-		$zip_code = esc_html( spine_get_option( 'contact_postalCode' ) );
+		$department    = spine_get_option( 'contact_department' );
+		$address       = spine_get_option( 'contact_streetAddress' );
+		$locality      = spine_get_option( 'contact_addressLocality' );
+		$zip_code      = spine_get_option( 'contact_postalCode' );
+		$telephone     = spine_get_option( 'contact_telephone' );
+		$email         = spine_get_option( 'contact_email' );
+		$contact_point = spine_get_option( 'contact_ContactPoint' );
+		$contact_title = spine_get_option( 'contact_ContactPointTitle' );
 
 		if ( ! empty( $atts['show_map'] ) ) {
 			wp_enqueue_script( 'google_maps_api', '//maps.googleapis.com/maps/api/js', array(), false, true );
@@ -65,16 +70,16 @@ class Item_County_Contact_Info_PB extends Item_PB {
 		ob_start();
 		?>
 		<div class="county-contact" style="padding-bottom: 1rem;">
-			<p style="padding-bottom: 0.5em;"><strong><?php echo esc_html( spine_get_option( 'contact_department' ) ); ?></strong></p>
-			<p style="padding-bottom: 0.5em;"><?php echo $address; ?><br />
-			<?php echo $locality; ?><br />
-			<?php echo $zip_code; ?><br />
-			<?php echo esc_html( spine_get_option( 'contact_telephone' ) ); ?><br />
-			<a href="mailto:<?php echo esc_attr( spine_get_option( 'contact_email' ) ); ?>"><?php echo esc_html( spine_get_option( 'contact_email' ) ); ?></a><br />
-			<?php $contact_point = spine_get_option( 'contact_ContactPoint' ); ?>
-			<?php if ( ! empty( $contact_point ) ) : ?>
-				<a href="<?php echo esc_url( $contact_point ); ?>"><?php echo esc_html( spine_get_option( 'contact_ContactPointTitle' ) ); ?></a>
-			<?php endif; ?></p>
+			<p style="padding-bottom: 0.5em;"><strong><?php echo esc_html( $department  ); ?></strong></p>
+			<p style="padding-bottom: 0.5em;"><?php
+      	if ( $address ) { echo esc_html( $address ) . '<br />'; }
+				if ( $locality ) { echo esc_html( $locality ) . '<br />'; }
+				if ( $zip_code ) { echo esc_html( $zip_code ) . '<br />'; }
+				if ( $telephone ) { echo esc_html( $telephone ) . '<br />'; }
+				if ( 'info@wsu.edu' != $email ) { echo '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a><br />'; }
+				if ( $contact_point && $contact_title ) { echo '<a href="' . esc_url( $contact_point ) . '">' . esc_html( $contact_title ) . '</a>'; }
+			?>
+			</p>
 			<?php echo wpautop( wp_kses_post( $content ) ); ?>
 			<?php if ( ! empty( $atts['show_map'] ) ) : ?>
 			<div style="margin-bottom: 1rem; padding-bottom: 50%; padding-bottom: calc(50% - 1rem); position:relative; width: 50%; width: calc(50% - 1rem);"><div id="county-google-map" style="height: 100%; position: absolute; width: 100%;"></div></div>
