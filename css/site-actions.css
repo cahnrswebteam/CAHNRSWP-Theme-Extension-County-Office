@@ -18,6 +18,7 @@
 	right: 0;
 	top: 10px;
 	width: auto;
+	z-index: 1;
 }
 .home.logged-in .actions-footer {
 	top: 42px;
