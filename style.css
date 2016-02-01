@@ -189,12 +189,76 @@ input[type="search"]::-webkit-search-decoration {
 	float: right;
 }
 
+/* Default gallery */
+.gallery {
+	margin: auto;
+	padding: 1rem 0 2rem;
+}
+.gallery:before,
+.gallery:after {
+	content: '';
+	display: table;
+}
+.gallery:after {
+	clear: both;
+}
+.gallery-columns-1 .gallery-item {
+	width: 100%;
+}
+.gallery-columns-2 .gallery-item {
+	width: 50%;
+}
+.gallery-columns-3 .gallery-item {
+	width: 33%;
+}
+.gallery-columns-4 .gallery-item {
+	width: 25%;
+}
+.gallery-columns-5 .gallery-item {
+	width: 20%;
+}
+.gallery-columns-6 .gallery-item {
+	width: 16.66%;
+}
+.gallery-columns-7 .gallery-item {
+	width: 14.28%;
+}
+.gallery-columns-8 .gallery-item {
+	width: 12.5%;
+}
+.gallery-columns-9 .gallery-item {
+	width: 11.11%;
+}
+.gallery .gallery-item {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 7px;
+}
+.gallery img {
+	border: none;
+}
+
+/* Image captions */
+figcaption {
+	color: #8d959a;
+	font-size: 0.9em;
+	line-height: 1.5em;
+	text-align: center;
+}
+
+.search .cahnrs-search {
+	margin-top: 2rem;
+}
+
 /* Misc */
 .county-responsive-media {
 	height: 0;
 	margin-bottom: 2rem;
 	padding-bottom: 56.25%;
 	position: relative;
+}
+article footer {
+	clear: both;
 }
 .tribe-events-list-widget {
 	padding-bottom: 1rem;
@@ -225,5 +289,19 @@ input[type="search"]::-webkit-search-decoration {
 	}
 	.county-desktop-search-form {
 		display: none;
+	}
+	.gallery-columns-1 .gallery-item,
+	.gallery-columns-2 .gallery-item,
+	.gallery-columns-3 .gallery-item,
+	.gallery-columns-4 .gallery-item,
+	.gallery-columns-5 .gallery-item,
+	.gallery-columns-6 .gallery-item,
+	.gallery-columns-7 .gallery-item,
+	.gallery-columns-8 .gallery-item,
+	.gallery-columns-9 .gallery-item {
+		width: 50%;
+	}
+	.gallery-item:nth-child(2n+3) {
+		clear: both;
 	}
 }
