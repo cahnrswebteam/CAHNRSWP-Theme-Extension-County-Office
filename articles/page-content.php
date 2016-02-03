@@ -5,7 +5,7 @@ if ( 'templates/program.php' === $page_template ) {
 	$program_contact_specialist = get_post_meta( get_the_ID(), '_cahnrswp_program_specialist', true );
 	$program_contact_phone = get_post_meta( get_the_ID(), '_cahnrswp_program_phone', true );
 	$program_contact_email = get_post_meta( get_the_ID(), '_cahnrswp_program_email', true );
-	$program_icon = get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true ) . '.png';
+	$program_icon = ( get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true ) ) ? get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( get_the_ID(), '_cahnrswp_program_icon', true ) . '.png' : NULL;
 } else {
 	$parent_pages  = get_post_ancestors( get_the_ID() );
 	if ( $parent_pages ) {
@@ -17,7 +17,7 @@ if ( 'templates/program.php' === $page_template ) {
 				$program_contact_specialist = get_post_meta( $parent_page, '_cahnrswp_program_specialist', true );
 				$program_contact_phone = get_post_meta( $parent_page, '_cahnrswp_program_phone', true );
 				$program_contact_email = get_post_meta( $parent_page, '_cahnrswp_program_email', true );
-				$program_icon = get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( $parent_page, '_cahnrswp_program_icon', true ) . '.png';
+				$program_icon = ( get_post_meta( $parent_page, '_cahnrswp_program_icon', true ) ) ? get_stylesheet_directory_uri() . '/program-icons/' . get_post_meta( $parent_page, '_cahnrswp_program_icon', true ) . '.png' : NULL;
 				break;
 			}
 		}
