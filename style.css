@@ -270,6 +270,13 @@ article footer {
 .tribe-events-list-widget li h4 {
 	font-size: 1.12em;
 }
+.tribe-events-event-url {
+	word-break: break-word;
+	word-wrap: break-word;
+}
+figure {
+	max-width: 100%;
+}
 
 @media screen and (max-width:989px) {
 	.home .main-header:before {
