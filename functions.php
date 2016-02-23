@@ -213,7 +213,7 @@ class WSU_Extension_County_Theme {
 				<input type="text" name="_cahnrswp_program_specialist" id="cahnrswp-program-specialist" class="widefat" value="<?php echo $program_contact_name; ?>" />
 			</p>
 			<p>
-				<label for="cahnrswp-program-phone">Phone</label>
+				<label for="cahnrswp-program-phone">Phone (xxx) xxx-xxxx</label>
 				<input type="text" name="_cahnrswp_program_phone" id="cahnrswp-program-phone" class="widefat" value="<?php echo $program_contact_phone; ?>" />
 			</p>
 			<p>
