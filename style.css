@@ -251,6 +251,11 @@ figcaption {
 }
 
 /* Misc */
+.article-header:after {
+	clear: both;
+	content: '';
+	display: table;
+}
 .county-responsive-media {
 	height: 0;
 	margin-bottom: 2rem;
