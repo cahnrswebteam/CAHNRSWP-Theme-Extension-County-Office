@@ -173,6 +173,34 @@ article > .article-header {
 	background: #5e6a71;
 }
 
+/* Contact info - likely just temporary */
+.county-contact {
+	padding-bottom: 1rem;
+}
+.county-contact:after {
+	content: '';
+	clear: both;
+	display: table;
+}
+.contact-information {
+	box-sizing: border-box;
+	float: left;
+	width: 50%;
+}
+.contact-information .name,
+.contact-information .information {
+	padding-bottom: 0.5em;
+}
+.contact-map {
+	float: right;
+	margin-bottom: 1rem;
+	padding-bottom: 50%;
+	padding-bottom: calc(50% - 1rem);
+	position: relative;
+	width: 50%;
+	width: calc(50% - 1rem);
+}
+
 /* Search form stuff */
 .county-mobile-search-form {
 	display: none;
