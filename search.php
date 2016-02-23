@@ -20,7 +20,19 @@
 
 			<?php while ( have_posts() ) : the_post(); ?>
 
-				<?php get_template_part( 'articles/post', get_post_type() ); ?>
+				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<header class="article-header">
+						<hgroup>
+							<h2 class="article-title">
+								<a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
+							</h2>
+						</hgroup>
+						<hgroup class="source">
+							<time class="article-date" datetime="<?php echo get_the_date( 'c' ); ?>"><?php echo get_the_date(); ?></time>
+							<cite class="article-author" role="author"><?php the_author_posts_link(); ?></cite>
+						</hgroup>
+					</header>
+				</article>
 
 			<?php endwhile; // end of the loop. ?>
 
