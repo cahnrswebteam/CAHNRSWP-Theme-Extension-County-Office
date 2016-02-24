@@ -359,9 +359,9 @@ class WSU_Extension_County_Theme {
 		if ( get_post_meta( get_the_ID(), 'body_class', true ) ) {
 			$classes[] = esc_attr( get_post_meta( get_the_ID(), 'body_class', true ) );
 		}
-		/*if ( is_customize_preview() ) {
+		if ( is_customize_preview() ) {
 			$classes[] = 'customizer-preview';
-		}*/
+		}
 		$classes[] = 'spine-' . esc_attr( spine_get_option( 'spine_color' ) );
 		return $classes;
 	}
