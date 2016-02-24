@@ -446,6 +446,11 @@ class WSU_Extension_County_Theme {
 			'file_path' => __DIR__ . '/includes/shortcodes/social-media-feed.php',
 			'priority'  => 0,
 		);
+		/*$items['wsuwp_people'] = array(
+			'class'   => 'Item_County_People_PB',
+			'file_path' => __DIR__ . '/includes/shortcodes/people.php',
+			'priority'  => 0,
+		);*/
 
 		return $items;
 	}
