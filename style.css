@@ -307,6 +307,12 @@ article footer {
 	word-break: break-word;
 	word-wrap: break-word;
 }
+.tribe-events-adv-list-widget .list-date {
+	display: none;
+}
+.tribe-events-adv-list-widget .list-info .tribe-events-title {
+	font-size: 1.12em;
+}
 figure {
 	max-width: 100%;
 }
