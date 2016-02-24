@@ -124,6 +124,7 @@ class Item_County_Showcase_PB extends Item_PB {
 			</div>
 			<?php endif; ?>
 
+			<?php if ( ! wp_is_mobile() ) : ?>
 			<div class="syndicated">
 
 				<?php
@@ -139,6 +140,7 @@ class Item_County_Showcase_PB extends Item_PB {
 				?>
 
 			</div>
+			<?php endif; ?>
 
 		</section>
 		<?php
@@ -191,7 +193,7 @@ class Item_County_Showcase_PB extends Item_PB {
 
 			foreach( $posts as $post ) {
 
-				$image = $post->featured_image->attachment_meta->sizes->{'spine-medium_size'}->url; // API v2: to come...
+				$image = $post->featured_image->attachment_meta->sizes->medium->url; // API v2: to come...
 				$link = esc_html( $post->link );
 				$title = esc_html( $post->title ); // API v2: $post->title->rendered
 				$excerpt = ( $excerpt ) ? $post->excerpt : '';
