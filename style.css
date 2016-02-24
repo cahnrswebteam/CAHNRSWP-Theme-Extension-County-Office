@@ -361,6 +361,9 @@ article footer {
 .tribe-events-adv-list-widget .list-info .tribe-events-title {
 	font-size: 1.12em;
 }
+.tribe-events-adv-list-widget .tribe-events-widget-link {
+	padding-top: 1em;
+}
 figure {
 	max-width: 100%;
 }
