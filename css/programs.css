@@ -65,12 +65,12 @@
 }
 .county-programs li.ag a {
 	background-image: url(../program-icons/ag.png);
-	border-color: #c69214;
-	color: #c69214;
+	border-color: #77580c;
+	color: #77580c;
 }
 .county-programs li.ag a:hover {
 	background-image: url(../program-icons/ag-white.png);
-	background-color: #c69214;
+	background-color: #77580c;
 }
 .county-programs li.ced a {
 	background-image: url(../program-icons/ced.png);
