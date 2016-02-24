@@ -22,7 +22,6 @@ class County_Actions_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-		wp_enqueue_style( 'cahnrswp-extension-county-actions', get_stylesheet_directory_uri() . '/css/site-actions.css' );
 		$class = is_front_page()? '' : ' class="secondary"' ;
 		?>
 		<nav<?php echo $class; ?>>
