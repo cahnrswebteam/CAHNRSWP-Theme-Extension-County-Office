@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 		$('#cahnrswp_county_program_info').toggle( $(this).val() == 'templates/program.php' );
 	}).change();
 	// Show program boilerplate.
-	$('#county-program-icon').change(function() {
+	/*$('#county-program-icon').change(function() {
 		switch ( $(this).val() ) {
 			case 'four-h':
 				boilerplate_toggle('4-H boilerplate placeholder.');
@@ -43,5 +43,5 @@ jQuery(document).ready(function($) {
 				}
 			});
 		}, 1500);
-  }
+  }*/
 });
