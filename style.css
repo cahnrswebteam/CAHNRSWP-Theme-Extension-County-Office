@@ -364,12 +364,35 @@ article footer {
 .tribe-events-adv-list-widget .tribe-events-widget-link {
 	padding-top: 1em;
 }
+.builder-layout .tribe-events-back,
+.builder-layout .tribe-events-single-event-title,
+.builder-layout .tribe-events-schedule,
+.builder-layout .tribe-events-cal-links,
+.builder-layout .tribe-events-related-events-title,
+.builder-layout .post .tribe-events-single ul.tribe-related-events,
+.builder-layout .tribe-events-single ul.tribe-related-events {
+	padding-left: 2rem;
+}
+.builder-layout .tribe-events-single ul.tribe-related-events {
+	padding-right: 2rem;
+}
+.single-tribe_events .builder-layout .tribe-events-event-meta,
+.builder-layout #tribe-events-footer {
+	margin-left: 2rem;
+	margin-right: 2rem;
+}
 figure {
 	max-width: 100%;
 }
 @media screen and (max-width:989px) {
 	.home .main-header:before {
 		margin-left: 0
+	}
+}
+@media screen and (max-width:768px) {
+	.single-tribe_events .builder-layout .tribe-events-schedule {
+		margin-left: 2rem;
+		margin-right: 2rem;
 	}
 }
 @media only screen and (max-width:693px) {
