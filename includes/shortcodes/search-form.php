@@ -1,5 +1,5 @@
 <?php
-class Item_County_Site_Search_Form_PB extends Item_PB {
+class Item_County_Site_Search_Form_PB extends CPB_Item {
 
 	/**
 	 * @var string Shortcode tag.

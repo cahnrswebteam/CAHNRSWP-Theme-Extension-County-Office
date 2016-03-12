@@ -1,30 +1,30 @@
 <?php
-class Item_County_Showcase_PB extends Item_PB {
+class Item_County_Showcase_PB extends CPB_Item {
 
 	/**
 	 * @var string Shortcode tag.
 	 */
-	public $slug = 'county_showcase';
+	protected $slug = 'county_showcase';
 
 	/**
 	 * @var string Name for displaying in Pagebuilder interface.
 	 */
-	public $name = 'Showcase';
+	protected $name = 'Showcase';
 
 	/**
 	 * @var string Description for displaying in Pagebuilder interface.
 	 */
-	public $desc = "A triptych of featured content for your site's homepage";
+	protected $desc = "A triptych of featured content for your site's homepage";
 
 	/**
 	 * @var string Size of GUI for Pagebuilder.
 	 */
-	public $form_size = 'medium';
+	protected $form_size = 'medium';
 
 	/**
 	 * Construct.
 
-	public function __construct( $atts, $content ) {
+	protected function __construct( $atts, $content ) {
 		parent::__construct( $atts, $content );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ), 21 );
 	} */
@@ -32,7 +32,7 @@ class Item_County_Showcase_PB extends Item_PB {
 	/**
 	 * Enqueue scripts and styles for the landing page showcase.
 
-	public function wp_enqueue_scripts() {
+	protected function wp_enqueue_scripts() {
 		$post = get_post();
 		if ( is_singular() && is_front_page() && has_shortcode( $post->post_content, 'county_showcase' ) ) {
 			wp_enqueue_style( 'cahnrswp-extension-county-showcase', get_stylesheet_directory_uri() . '/css/showcase.css' );
@@ -47,7 +47,7 @@ class Item_County_Showcase_PB extends Item_PB {
 	 *
 	 * @return string
 	 */
-	public function item( $atts ) {
+	protected function item( $settings , $content ) {
 
 		$defaults = array(
 			'feature_source'         => '',
@@ -69,7 +69,7 @@ class Item_County_Showcase_PB extends Item_PB {
 			'third_feed_term'       => '',
 		);
 
-		$atts = shortcode_atts( $defaults, $atts );
+		$atts = shortcode_atts( $defaults, $settings );
 
 		if ( ! is_front_page() && ( empty( $atts['feature_source'] ) || empty( $atts['second_feed_url'] ) || empty( $atts['third_feed_url'] ) ) ) {
 			return '';
@@ -162,7 +162,7 @@ class Item_County_Showcase_PB extends Item_PB {
 	 *
 	 * @return string
 	 */
-	public function remote_query( $url, $post_type, $taxonomy, $term, $excerpt ) {
+	protected function remote_query( $url, $post_type, $taxonomy, $term, $excerpt ) {
 
 		$request_url = esc_url( $url . '/wp-json/posts/' );
 		//$request_url = esc_url( $url . 'wp-json/wp/v2/' . sanitize_key( $post_type ) ); // What the API v2 url might look like.
@@ -213,14 +213,14 @@ class Item_County_Showcase_PB extends Item_PB {
 	 *
 	 * @return string
 	 */
-	public function editor( $atts ) {
+	//protected function editor( $atts ) {
 
 		/* somehow flawed
 		if ( get_the_ID() != get_option( 'page_on_front' ) ) {
 			return '<p>The showcase will only display on the home page.</p>';
 		}*/
 
-		$defaults = array(
+		/*$defaults = array(
 			'feature_source'  => '',
 			'second_feed_url' => '',
 			'third_feed_url'  => '',
@@ -264,7 +264,7 @@ class Item_County_Showcase_PB extends Item_PB {
 
 		return $html;
 
-	}
+	}*/
 
 	/**
 	 * Pagebuilder GUI fields.
@@ -273,9 +273,54 @@ class Item_County_Showcase_PB extends Item_PB {
 	 *
 	 * @return string
 	 */
-	public function form( $atts ) {
+	protected function form( $settings , $content ) {
+		
+		$feature_feed = array(
+			'name'    => $this->get_input_name( 'feature_source' ),
+			'value'   => 'feed',
+			'selected' => $settings['feature_source'],
+			'title'   => 'Feed',
+			'desc'    => 'Most recent post or page, optionally based on categories or tags.',
+			'form'    => $this->form_fields->get_form_local_query( $this->get_input_name() , $settings ),
+			);
+			
+		$feature_manual = array(
+			'name'    => $this->get_input_name( 'feature_source' ),
+			'value'   => 'manual',
+			'selected' => $settings['feature_source'],
+			'title'   => 'Manual',
+			'desc'    => 'Most recent post or page, optionally based on categories or tags.',
+			'form'    => $this->form_fields->get_manual_feature( $this->get_input_name() , $settings ), 
+			);
+		
+		$remote_feed = array(
+			'name'    => $this->get_input_name( 'feature_source' ),
+			'value'   => 'remote_feed',
+			'selected' => $settings['feature_source'],
+			'title'   => 'Feed (Another Site)',
+			'desc'    => 'Content from another site.',
+			'form'    => $this->syndicated_content( $this->get_input_name(), 'feature_feed', $settings ),
+			);
+		
+		$feature_html = $this->form_fields->multi_form( array( $feature_feed , $feature_manual , $remote_feed ) );
+		
+		$second_feature = '<p>Content for the top right feature.</p>';
+		$second_feature .= $this->syndicated_content( $this->get_input_name(), 'second_feed', $settings );
+		
+		$third_feature = '<p>Content for the bottom right feature.</p>';
+		$third_feature .= $this->syndicated_content( $this->get_input_name(), 'third_feed', $settings );
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
-		$feature = $this->accordion_radio(
+		/*$feature = $this->accordion_radio(
 			$this->get_name_field('feature_source'),
 			'feed',
 			$atts['feature_source'],
@@ -300,16 +345,16 @@ class Item_County_Showcase_PB extends Item_PB {
 			'Feed (Another Site)',
 			$this->syndicated_content( $this->get_name_field(), 'feature_feed', $atts ),
 			'Content from another site.'
-		);
+		);*/
 
-		$second_feature = '<p>Content for the top right feature.</p>';
+		/*$second_feature = '<p>Content for the top right feature.</p>';
 		$second_feature .= $this->syndicated_content( $this->get_name_field(), 'second_feed', $atts );
 
 		$third_feature = '<p>Content for the bottom right feature.</p>';
-		$third_feature .= $this->syndicated_content( $this->get_name_field(), 'third_feed', $atts );
+		$third_feature .= $this->syndicated_content( $this->get_name_field(), 'third_feed', $atts );*/
 
 		$html = array(
-			'Main'         => $feature,
+			'Main'         => $feature_html,
 			'Top Right'    => $second_feature,
 			'Bottom Right' => $third_feature,
 		);
@@ -329,12 +374,12 @@ class Item_County_Showcase_PB extends Item_PB {
 	 *
 	 * @todo Probably offer up a select field with a limited number of sites instead of a text input field for URL.
 	 */
-	public static function syndicated_content( $base_name, $prefix, $atts ) {
+	protected function syndicated_content( $base_name, $prefix, $atts ) {
 
-		$html  = Forms_PB::text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'], 'Site URL (Homepage)', 'cpb-field-one-column' );
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'], 'Post Type (slug)');
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'], 'Feed By (slug)');
-		$html .= Forms_PB::text_field( $base_name . '[' . $prefix . '_term]', $atts[ $prefix . '_term'], 'Term (Name)');
+		$html  = $this->form_fields->text_field( $base_name . '[' . $prefix . '_url]', $atts[ $prefix . '_url'], 'Site URL (Homepage)', 'cpb-field-one-column' );
+		$html .= $this->form_fields->text_field( $base_name . '[' . $prefix . '_post_type]', $atts[ $prefix . '_post_type'], 'Post Type (slug)');
+		$html .= $this->form_fields->text_field( $base_name . '[' . $prefix . '_taxonomy]', $atts[ $prefix . '_taxonomy'], 'Feed By (slug)');
+		$html .= $this->form_fields->text_field( $base_name . '[' . $prefix . '_term]', $atts[ $prefix . '_term'], 'Term (Name)');
 
 		return $html;
 
@@ -347,7 +392,9 @@ class Item_County_Showcase_PB extends Item_PB {
 	 *
 	 * @return array
 	 */
-	public function clean( $atts ) {
+	protected function clean( $atts ) {
+		
+		//var_dump( $atts );
 
 		$clean = array();
 
@@ -366,8 +413,14 @@ class Item_County_Showcase_PB extends Item_PB {
 		if ( ! empty( $atts['terms'] ) ) {
 			$clean['terms'] = sanitize_text_field( $atts['terms'] );
 		}
+		
+		if ( ! empty( $atts['items'] ) ){
+			
+			$clean['items'] = $atts['items'];
+			
+		} // end if
 
-		if ( ! empty( $atts['items'] ) ) {
+		/*if ( ! empty( $atts['items'] ) ) {
 			if ( is_array( $atts['items'] ) ) {
 				$items = '{';
 				$index = 0;
@@ -394,7 +447,7 @@ class Item_County_Showcase_PB extends Item_PB {
 			} else {
 				$clean['items'] = str_replace( "'", '"', $atts['items'] );
 			}
-		}
+		}*/
 
 		if ( ! empty( $atts['feature_feed_url'] ) ) {
 			$clean['feature_feed_url'] = sanitize_text_field( $atts['feature_feed_url'] );

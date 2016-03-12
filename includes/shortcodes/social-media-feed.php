@@ -1,5 +1,5 @@
 <?php
-class Item_County_Social_Media_Feed_PB extends Item_PB {
+class Item_County_Social_Media_Feed_PB extends CPB_Item {
 
 	/**
 	 * @var string Shortcode tag.
