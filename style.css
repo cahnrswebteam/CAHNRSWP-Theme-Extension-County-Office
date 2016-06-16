@@ -120,6 +120,18 @@ article > .article-header {
 .actions-footer a:hover {
 	background: #c60c30;
 }
+/* Empty leading p tags from builder */
+.column > p:first-child:empty {
+	padding: 0;
+}
+.column > p:first-child:empty + h1,
+.column > p:first-child:empty + h2,
+.column > p:first-child:empty + h3,
+.column > p:first-child:empty + h4,
+.column > p:first-child:empty + h5,
+.column > p:first-child:empty + h6 {
+	padding-top: 0;
+}
 /* Contact form */
 .county-contact-form {
 	margin: 0;
